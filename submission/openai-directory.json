@@ -92,13 +92,13 @@
     {
       "tool": "agents.publish",
       "readOnly": "Changes an agent from draft to published within Kimono.",
-      "destructive": "Publishing is reversible through agents.unpublish and requires the exact expected agent name plus explicit confirmation.",
+      "destructive": "It is marked destructive because publication changes operational availability for organization users, even though agents.unpublish can reverse it; it requires the exact expected name and explicit confirmation.",
       "openWorld": "Publication changes availability only inside the authenticated Kimono organization."
     },
     {
       "tool": "agents.unpublish",
       "readOnly": "Changes a published Kimono agent back to draft.",
-      "destructive": "The agent is retained and can be published again; exact-name confirmation prevents targeting the wrong resource.",
+      "destructive": "It is marked destructive because removing a live agent can interrupt organization workflows, even though the agent is retained and can be published again; exact-name confirmation prevents targeting the wrong resource.",
       "openWorld": "The availability change remains inside the private Kimono organization."
     },
     {
