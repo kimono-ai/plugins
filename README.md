@@ -35,4 +35,8 @@ select or cross organization boundaries.
 - [Terms of service](https://usekimono.ai/terms)
 - Support: [support@usekimono.ai](mailto:support@usekimono.ai)
 
+Non-secret preparation material for the OpenAI public directory is kept under
+[`submission/`](./submission). Reviewer credentials are never stored in this
+repository.
+
 Licensed under the [Apache License 2.0](./LICENSE).

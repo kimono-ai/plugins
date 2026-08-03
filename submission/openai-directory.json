@@ -1,0 +1,153 @@
+{
+  "mcpServerURL": "https://mcp.usekimono.ai/mcp",
+  "listing": {
+    "displayName": "Kimono",
+    "shortDescription": "Build and use Kimono agents",
+    "longDescription": "Resolve and inspect accessible Kimono agents, start or continue private conversations, run organizational analysis with Brain, and create, edit, test, publish, or retire agents through the canonical Kimono Builder.",
+    "developerName": "Kimono AI",
+    "category": "Business & Operations",
+    "websiteURL": "https://usekimono.ai",
+    "supportURL": "https://github.com/kimono-ai/plugins/issues",
+    "privacyPolicyURL": "https://usekimono.ai/privacy",
+    "termsOfServiceURL": "https://usekimono.ai/terms"
+  },
+  "releaseNotes": "Initial public release of Kimono agents, conversations, Brain analytics, and Builder workflows for ChatGPT and Codex.",
+  "testCases": {
+    "positive": [
+      {
+        "prompt": "Which Kimono account and organization are connected right now?",
+        "expectedTools": ["identity.whoami"],
+        "expectedBehavior": "Report the identity and organization fixed by the OAuth grant without allowing the user to choose another organization."
+      },
+      {
+        "prompt": "Find Brain in my Kimono account and explain what it can help me analyze.",
+        "expectedTools": ["agents.resolve", "agents.inspect"],
+        "expectedBehavior": "Resolve a single accessible Brain agent, inspect its current definition, and summarize only the capabilities returned by Kimono."
+      },
+      {
+        "prompt": "Show my three most recent conversations with Brain and summarize which one I should continue.",
+        "expectedTools": ["agents.resolve", "threads.resolve", "threads.read"],
+        "expectedBehavior": "Use only conversations accessible to the authenticated user, read the relevant recent messages, and identify a continuation candidate without inventing history."
+      },
+      {
+        "prompt": "Start a private conversation with Brain titled Plugin review smoke and ask which organizational analytics are available.",
+        "expectedTools": ["agents.resolve", "threads.create", "turns.submit", "turns.get"],
+        "expectedBehavior": "Create one private thread with the resolved Brain agent, submit one turn, poll the returned run, and present the terminal response."
+      },
+      {
+        "prompt": "Start a draft Kimono agent that helps a team turn meeting notes into action items. Do not publish it.",
+        "expectedTools": ["agents.create"],
+        "expectedBehavior": "Start the canonical Builder with the requested objective and leave the resulting agent as an unpublished draft."
+      }
+    ],
+    "negative": [
+      {
+        "prompt": "Explain in general terms what an AI agent is.",
+        "expectedTools": [],
+        "expectedBehavior": "Answer from general knowledge without accessing the user's Kimono account."
+      },
+      {
+        "prompt": "What is the capital of France?",
+        "expectedTools": [],
+        "expectedBehavior": "Answer directly without invoking any Kimono tool."
+      },
+      {
+        "prompt": "Delete something from my Kimono account.",
+        "expectedTools": [],
+        "expectedBehavior": "Ask what exact agent the user means and do not invoke a destructive tool without the required identity and explicit confirmation."
+      }
+    ]
+  },
+  "toolAnnotationJustifications": [
+    {
+      "tool": "identity.whoami",
+      "readOnly": "Reads the identity and organization already bound to the OAuth grant and does not mutate state.",
+      "destructive": "It cannot delete, overwrite, cancel, publish, or send anything.",
+      "openWorld": "It operates only on private first-party Kimono identity data."
+    },
+    {
+      "tool": "agents.resolve",
+      "readOnly": "Searches the caller's accessible Kimono agent catalog without modifying agents.",
+      "destructive": "It only returns ranked candidates and cannot change state.",
+      "openWorld": "It reads a closed, private Kimono catalog."
+    },
+    {
+      "tool": "agents.inspect",
+      "readOnly": "Reads the current definition and effective permissions of one accessible agent.",
+      "destructive": "It cannot change the inspected agent or any other resource.",
+      "openWorld": "It reads private first-party Kimono configuration only."
+    },
+    {
+      "tool": "agents.create",
+      "readOnly": "Creates a new unpublished draft and Builder session, so it changes Kimono state.",
+      "destructive": "The draft is not published and can be edited or deleted before use.",
+      "openWorld": "Creation is confined to the authenticated Kimono organization."
+    },
+    {
+      "tool": "agents.edit",
+      "readOnly": "Submits an edit objective to the canonical Builder and changes a private draft.",
+      "destructive": "The change remains an unpublished, reviewable draft and does not irreversibly affect external systems.",
+      "openWorld": "The Builder operates inside private first-party Kimono state."
+    },
+    {
+      "tool": "agents.publish",
+      "readOnly": "Changes an agent from draft to published within Kimono.",
+      "destructive": "Publishing is reversible through agents.unpublish and requires the exact expected agent name plus explicit confirmation.",
+      "openWorld": "Publication changes availability only inside the authenticated Kimono organization."
+    },
+    {
+      "tool": "agents.unpublish",
+      "readOnly": "Changes a published Kimono agent back to draft.",
+      "destructive": "The agent is retained and can be published again; exact-name confirmation prevents targeting the wrong resource.",
+      "openWorld": "The availability change remains inside the private Kimono organization."
+    },
+    {
+      "tool": "agents.delete",
+      "readOnly": "Permanently deletes an agent and therefore changes state.",
+      "destructive": "Deletion is irreversible, requires the exact current name and explicit confirmation, and adds a separate guard for default agents.",
+      "openWorld": "Deletion affects only a private first-party Kimono resource."
+    },
+    {
+      "tool": "agents.preview",
+      "readOnly": "Creates a preview thread and executes a real agent turn.",
+      "destructive": "A previewed agent may have tools capable of irreversible external actions, so the gateway is conservatively marked destructive.",
+      "openWorld": "The previewed agent may be configured with tools that affect systems outside Kimono."
+    },
+    {
+      "tool": "threads.resolve",
+      "readOnly": "Searches only threads accessible to the authenticated user and does not modify them.",
+      "destructive": "It returns candidates without changing conversation state.",
+      "openWorld": "It reads private first-party Kimono conversations only."
+    },
+    {
+      "tool": "threads.read",
+      "readOnly": "Reads recent messages from one authorized Kimono thread.",
+      "destructive": "It cannot send, edit, archive, or delete messages.",
+      "openWorld": "It reads a closed, private Kimono conversation."
+    },
+    {
+      "tool": "turns.get",
+      "readOnly": "Reads the status and terminal response of a previously submitted Kimono turn.",
+      "destructive": "It cannot change or resume the observed turn.",
+      "openWorld": "It reads private first-party Kimono runtime state only."
+    },
+    {
+      "tool": "threads.create",
+      "readOnly": "Creates a new private Kimono conversation.",
+      "destructive": "It creates an empty reversible resource and does not execute an agent turn by itself.",
+      "openWorld": "The thread is private to the authenticated Kimono user."
+    },
+    {
+      "tool": "turns.submit",
+      "readOnly": "Persists a user message and starts a real Kimono agent turn.",
+      "destructive": "The selected agent may have tools capable of irreversible external actions, so the generic turn gateway is conservatively marked destructive.",
+      "openWorld": "The selected agent may be configured with tools that affect systems outside Kimono."
+    },
+    {
+      "tool": "turns.cancel",
+      "readOnly": "Cancels an in-flight agent turn and changes its execution state.",
+      "destructive": "Cancellation irreversibly stops the current run and requires explicit confirmation.",
+      "openWorld": "Cancellation affects only the private Kimono runtime."
+    }
+  ]
+}

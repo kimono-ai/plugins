@@ -15,7 +15,7 @@
   "mcpServers": "./.mcp.json",
   "interface": {
     "displayName": "Kimono",
-    "shortDescription": "Work with your Kimono agents from ChatGPT and Codex",
+    "shortDescription": "Build and use Kimono agents",
     "longDescription": "Resolve and inspect accessible Kimono agents, start or continue private conversations, run organizational analysis with Brain, and create, edit, test, publish, or retire agents through the canonical Kimono Builder.",
     "developerName": "Kimono AI",
     "category": "Business & Operations",
