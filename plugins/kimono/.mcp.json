@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "kimono": {
+      "type": "http",
+      "url": "https://mcp.usekimono.ai/mcp",
+      "oauth_resource": "https://mcp.usekimono.ai/mcp"
+    }
+  }
+}

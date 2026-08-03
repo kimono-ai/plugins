@@ -1,0 +1,4 @@
+interface:
+  display_name: "Use Kimono Agents"
+  short_description: "Start or continue conversations with Kimono agents"
+  default_prompt: "Ask a Kimono agent for help and return its final response."

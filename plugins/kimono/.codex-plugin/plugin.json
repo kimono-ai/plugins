@@ -1,0 +1,37 @@
+{
+  "name": "kimono",
+  "version": "0.1.0",
+  "description": "Work with Kimono agents, conversations, Brain analytics, and the agent Builder.",
+  "author": {
+    "name": "Kimono AI",
+    "email": "support@usekimono.ai",
+    "url": "https://usekimono.ai"
+  },
+  "homepage": "https://usekimono.ai",
+  "repository": "https://github.com/kimono-ai/plugins",
+  "license": "Apache-2.0",
+  "keywords": ["kimono", "agents", "brain", "analytics", "builder", "mcp"],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "Kimono",
+    "shortDescription": "Work with your Kimono agents from ChatGPT and Codex",
+    "longDescription": "Resolve and inspect accessible Kimono agents, start or continue private conversations, run organizational analysis with Brain, and create, edit, test, publish, or retire agents through the canonical Kimono Builder.",
+    "developerName": "Kimono AI",
+    "category": "Business & Operations",
+    "capabilities": ["Interactive", "Read", "Write"],
+    "websiteURL": "https://usekimono.ai",
+    "privacyPolicyURL": "https://usekimono.ai/privacy",
+    "termsOfServiceURL": "https://usekimono.ai/terms",
+    "defaultPrompt": [
+      "Ask one of my Kimono agents for help",
+      "Analyze my organization with Brain",
+      "Help me improve and test a Kimono agent"
+    ],
+    "brandColor": "#111827",
+    "composerIcon": "./assets/kimono-icon.png",
+    "logo": "./assets/kimono-logo.png",
+    "logoDark": "./assets/kimono-logo.png",
+    "screenshots": []
+  }
+}

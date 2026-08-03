@@ -1,0 +1,4 @@
+interface:
+  display_name: "Analyze with Kimono Brain"
+  short_description: "Analyze organization data through the Kimono Brain"
+  default_prompt: "Use the Kimono Brain to analyze my organization."

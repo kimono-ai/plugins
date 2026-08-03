@@ -1,0 +1,20 @@
+{
+  "name": "kimono",
+  "interface": {
+    "displayName": "Kimono Official"
+  },
+  "plugins": [
+    {
+      "name": "kimono",
+      "source": {
+        "source": "local",
+        "path": "./plugins/kimono"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Business & Operations"
+    }
+  ]
+}
