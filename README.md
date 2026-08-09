@@ -1,8 +1,9 @@
 # Kimono plugins
 
-Official public plugin packages for ChatGPT and Codex. The packages in this
-repository contain manifests, skills, and public assets. Kimono's hosted MCP
-server and product implementation remain in the private Kimono platform.
+Official public plugin packages for ChatGPT, Codex, Claude Code, and Claude
+Cowork. The packages in this repository contain host manifests, skills, MCP
+connection metadata, and public assets. Kimono's hosted MCP server and product
+implementation remain in the private Kimono platform.
 
 ## Install from ChatGPT or Codex
 
@@ -23,6 +24,19 @@ After installation, authenticate with your Kimono account. Kimono derives the
 organization and effective permissions from that account; the plugin cannot
 select or cross organization boundaries.
 
+## Install from Claude Code
+
+Add the public Kimono marketplace and install the plugin:
+
+```bash
+claude plugin marketplace add kimono-ai/plugins
+claude plugin install kimono@kimono
+```
+
+Restart Claude Code or run `/reload-plugins`, then open `/mcp` and authenticate
+the `kimono` server with your Kimono account. The same package is eligible for
+Claude Cowork through Anthropic's official Plugin Directory.
+
 ## Available plugin
 
 - [`kimono`](./plugins/kimono): interact with accessible agents, continue or
@@ -35,8 +49,8 @@ select or cross organization boundaries.
 - [Terms of service](https://usekimono.ai/terms)
 - Support: [support@usekimono.ai](mailto:support@usekimono.ai)
 
-Non-secret preparation material for the OpenAI public directory is kept under
-[`submission/`](./submission). Reviewer credentials are never stored in this
-repository.
+Non-secret preparation material for the OpenAI and Anthropic public directories
+is kept under [`submission/`](./submission). Reviewer credentials are never
+stored in this repository.
 
 Licensed under the [Apache License 2.0](./LICENSE).

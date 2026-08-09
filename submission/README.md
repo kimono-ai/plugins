@@ -1,9 +1,12 @@
-# OpenAI directory submission
+# Public directory submissions
 
 The non-secret submission material lives in
-[`openai-directory.json`](./openai-directory.json). It keeps the five positive
-cases, three negative cases, release notes, and tool-annotation justifications
-reviewable alongside the public plugin package.
+[`openai-directory.json`](./openai-directory.json) and
+[`anthropic-directory.json`](./anthropic-directory.json). These files keep the
+directory listings, test cases, and review notes versioned alongside the public
+plugin package.
+
+## OpenAI
 
 Before submitting a release through the OpenAI plugin portal:
 
@@ -21,3 +24,18 @@ Before submitting a release through the OpenAI plugin portal:
 The reviewer account must be isolated demo data, require no MFA or email/SMS
 verification, and have only the minimum Kimono permissions needed by the test
 cases.
+
+## Anthropic
+
+Before selecting **Submit for review** in the Anthropic Plugin Directory:
+
+1. run `claude plugin validate . --strict` from the repository root;
+2. add the local marketplace and install `kimono@kimono`;
+3. confirm all three namespaced skills are discoverable;
+4. authenticate the plugin-provided `kimono` MCP server through `/mcp`;
+5. exercise a read-only conversation and Brain request with a restricted test
+   user before testing Builder mutations;
+6. confirm the listing still matches `anthropic-directory.json`.
+
+Do not submit when manifest validation, MCP OAuth, tool discovery, or the
+representative functional checks are incomplete.

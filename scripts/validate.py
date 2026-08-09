@@ -6,7 +6,9 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 MARKETPLACE_PATH = ROOT / ".agents/plugins/marketplace.json"
+CLAUDE_MARKETPLACE_PATH = ROOT / ".claude-plugin/marketplace.json"
 SUBMISSION_PATH = ROOT / "submission/openai-directory.json"
+ANTHROPIC_SUBMISSION_PATH = ROOT / "submission/anthropic-directory.json"
 SUPPORTED_CATEGORIES = {
     "Productivity",
     "Creativity",
@@ -33,9 +35,17 @@ def validate_plugin(entry: dict):
     plugin_dir = (ROOT / entry["source"]["path"]).resolve()
     manifest_path = plugin_dir / ".codex-plugin/plugin.json"
     manifest = load_json(manifest_path)
+    claude_manifest = load_json(plugin_dir / ".claude-plugin/plugin.json")
 
     assert plugin_dir.is_relative_to(ROOT), f"Plugin escapes repository: {plugin_dir}"
     assert manifest["name"] == entry["name"] == plugin_dir.name
+    assert claude_manifest["name"] == manifest["name"]
+    assert claude_manifest["version"] == manifest["version"]
+    assert claude_manifest["description"] == manifest["description"]
+    assert claude_manifest["author"] == manifest["author"]
+    assert claude_manifest["homepage"] == manifest["homepage"]
+    assert claude_manifest["repository"] == manifest["repository"]
+    assert claude_manifest["license"] == manifest["license"]
     assert manifest["version"].count(".") >= 2
     assert manifest["description"].strip()
     assert manifest["author"]["name"].strip()
@@ -57,6 +67,8 @@ def validate_plugin(entry: dict):
     for key in ("skills", "mcpServers"):
         referenced = (plugin_dir / manifest[key]).resolve()
         assert referenced.exists(), f"Missing {key}: {referenced}"
+        claude_referenced = (plugin_dir / claude_manifest[key]).resolve()
+        assert claude_referenced == referenced, f"Host {key} paths diverge"
 
     for key in ("composerIcon", "logo", "logoDark"):
         referenced = (plugin_dir / manifest["interface"][key]).resolve()
@@ -75,13 +87,23 @@ def validate_plugin(entry: dict):
 
 def main():
     marketplace = load_json(MARKETPLACE_PATH)
+    claude_marketplace = load_json(CLAUDE_MARKETPLACE_PATH)
     assert marketplace["name"] == "kimono"
+    assert claude_marketplace["name"] == marketplace["name"]
     assert marketplace["plugins"], "Marketplace has no plugins"
+    assert len(claude_marketplace["plugins"]) == len(marketplace["plugins"])
     for entry in marketplace["plugins"]:
         assert entry["source"]["source"] == "local"
         assert entry["policy"]["installation"] in {"AVAILABLE", "INSTALLED_BY_DEFAULT"}
         assert entry["policy"]["authentication"] in {"ON_INSTALL", "ON_USE"}
         validate_plugin(entry)
+    for entry in claude_marketplace["plugins"]:
+        assert entry["source"].startswith("./")
+        plugin_dir = (ROOT / entry["source"]).resolve()
+        assert plugin_dir.is_relative_to(ROOT)
+        claude_manifest = load_json(plugin_dir / ".claude-plugin/plugin.json")
+        assert entry["name"] == claude_manifest["name"]
+        assert entry["version"] == claude_manifest["version"]
     submission = load_json(SUBMISSION_PATH)
     assert submission["mcpServerURL"] == "https://mcp.usekimono.ai/mcp"
     listing = submission["listing"]
@@ -96,6 +118,12 @@ def main():
     assert len(justifications) == 15
     assert len({entry["tool"] for entry in justifications}) == 15
     assert all(entry["readOnly"] and entry["destructive"] and entry["openWorld"] for entry in justifications)
+    anthropic_submission = load_json(ANTHROPIC_SUBMISSION_PATH)
+    assert anthropic_submission["pluginRepository"] == "https://github.com/kimono-ai/plugins"
+    assert anthropic_submission["repositoryPath"] == "plugins/kimono"
+    assert anthropic_submission["supportedPlatforms"] == ["Claude Code"]
+    assert anthropic_submission["license"] == "Apache-2.0"
+    assert len(anthropic_submission["exampleUseCases"]) >= 3
     print(f"Validated {len(marketplace['plugins'])} Kimono plugin(s).")
 
 

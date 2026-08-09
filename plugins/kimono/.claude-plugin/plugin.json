@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "kimono",
+  "displayName": "Kimono",
+  "version": "0.2.0",
+  "description": "Work with Kimono agents, conversations, Brain analytics, and the agent Builder.",
+  "author": {
+    "name": "Kimono AI",
+    "email": "support@usekimono.ai",
+    "url": "https://usekimono.ai"
+  },
+  "homepage": "https://usekimono.ai",
+  "repository": "https://github.com/kimono-ai/plugins",
+  "license": "Apache-2.0",
+  "keywords": ["kimono", "agents", "brain", "analytics", "builder", "mcp"],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json"
+}
