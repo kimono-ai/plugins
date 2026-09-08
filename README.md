@@ -1,8 +1,8 @@
 # Kimono plugins
 
-Official public plugin packages for ChatGPT, Codex, Claude Code, and Claude
-Cowork. The packages in this repository contain host manifests, skills, MCP
-connection metadata, and public assets. Kimono's hosted MCP server and product
+Official public plugin packages for ChatGPT, Codex, and Claude Code. The
+packages in this repository contain host manifests, skills, MCP connection
+metadata, and public assets. Kimono's hosted MCP server and product
 implementation remain in the private Kimono platform.
 
 ## Install from ChatGPT or Codex
@@ -34,8 +34,10 @@ claude plugin install kimono@kimono
 ```
 
 Restart Claude Code or run `/reload-plugins`, then open `/mcp` and authenticate
-the `kimono` server with your Kimono account. The same package is eligible for
-Claude Cowork through Anthropic's official Plugin Directory.
+the `kimono` server with your Kimono account. To distribute the package through
+Anthropic's Claude plugin directory, use the current Claude.ai or Console
+submission form. Approved third-party plugins enter the community marketplace;
+Anthropic's curated official marketplace is separate.
 
 ## Available plugin
 

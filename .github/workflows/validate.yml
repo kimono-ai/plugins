@@ -20,5 +20,5 @@ jobs:
         with:
           node-version: "22"
       - run: python scripts/validate.py
-      - run: npx -y @anthropic-ai/claude-code@2.1.226 plugin validate . --strict
-      - run: npx -y @anthropic-ai/claude-code@2.1.226 plugin validate plugins/kimono --strict
+      - run: npx -y @anthropic-ai/claude-code@2.1.263 plugin validate . --strict
+      - run: npx -y @anthropic-ai/claude-code@2.1.263 plugin validate plugins/kimono --strict

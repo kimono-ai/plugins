@@ -25,6 +25,46 @@ SUPPORTED_CATEGORIES = {
     "Other",
 }
 
+# These are the public MCP names used by the directory test cases and
+# annotation justifications. Keep this set synchronized with the hosted MCP
+# catalog when that contract changes; metadata must never advertise an alias
+# that the server does not expose.
+SUBMISSION_MCP_TOOL_NAMES = {
+    "identity_whoami",
+    "agents_resolve",
+    "agents_capabilities",
+    "agents_create",
+    "agents_draft_patch",
+    "agents_publish",
+    "agents_unpublish",
+    "agents_delete",
+    "agents_preview",
+    "threads_resolve",
+    "threads_read",
+    "threads_create",
+    "turns_submit",
+    "turns_get",
+    "turns_cancel",
+}
+
+LEGACY_DOTTED_TOOL_NAMES = {
+    "identity.whoami",
+    "agents.resolve",
+    "agents.inspect",
+    "agents.create",
+    "agents.edit",
+    "agents.publish",
+    "agents.unpublish",
+    "agents.delete",
+    "agents.preview",
+    "threads.resolve",
+    "threads.read",
+    "threads.create",
+    "turns.submit",
+    "turns.get",
+    "turns.cancel",
+}
+
 
 def load_json(path: Path):
     with path.open(encoding="utf-8") as source:
@@ -78,6 +118,8 @@ def validate_plugin(entry: dict):
         content = skill_file.read_text(encoding="utf-8")
         assert "[TODO:" not in content, f"Placeholder in {skill_file}"
         assert f"name: {skill_file.parent.name}" in content, f"Skill name mismatch in {skill_file}"
+        for legacy_name in LEGACY_DOTTED_TOOL_NAMES:
+            assert f"`{legacy_name}`" not in content, f"Legacy MCP tool name {legacy_name} in {skill_file}"
 
     mcp = load_json(plugin_dir / manifest["mcpServers"])
     for server in mcp["mcpServers"].values():
@@ -114,9 +156,15 @@ def main():
         assert listing[key].startswith("https://"), f"Invalid submission {key}"
     assert len(submission["testCases"]["positive"]) == 5
     assert len(submission["testCases"]["negative"]) == 3
+    for case in submission["testCases"]["positive"]:
+        unknown_tools = set(case["expectedTools"]) - SUBMISSION_MCP_TOOL_NAMES
+        assert not unknown_tools, f"Unknown MCP tools in test case: {sorted(unknown_tools)}"
     justifications = submission["toolAnnotationJustifications"]
     assert len(justifications) == 15
-    assert len({entry["tool"] for entry in justifications}) == 15
+    justification_tools = {entry["tool"] for entry in justifications}
+    assert (
+        justification_tools == SUBMISSION_MCP_TOOL_NAMES
+    ), "Directory annotations must cover the current MCP tool contract"
     assert all(entry["readOnly"] and entry["destructive"] and entry["openWorld"] for entry in justifications)
     anthropic_submission = load_json(ANTHROPIC_SUBMISSION_PATH)
     assert anthropic_submission["pluginRepository"] == "https://github.com/kimono-ai/plugins"

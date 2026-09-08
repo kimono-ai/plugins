@@ -25,9 +25,10 @@ The reviewer account must be isolated demo data, require no MFA or email/SMS
 verification, and have only the minimum Kimono permissions needed by the test
 cases.
 
-## Anthropic
+## Anthropic Claude plugin directory
 
-Before selecting **Submit for review** in the Anthropic Plugin Directory:
+Before selecting **Submit for review** in Anthropic's current Claude plugin
+directory form:
 
 1. run `claude plugin validate . --strict` from the repository root;
 2. add the local marketplace and install `kimono@kimono`;
@@ -37,5 +38,7 @@ Before selecting **Submit for review** in the Anthropic Plugin Directory:
    user before testing Builder mutations;
 6. confirm the listing still matches `anthropic-directory.json`.
 
-Do not submit when manifest validation, MCP OAuth, tool discovery, or the
-representative functional checks are incomplete.
+Third-party approvals are reviewed for the community marketplace; the curated
+official marketplace is a separate Anthropic program. Do not submit when
+manifest validation, MCP OAuth, tool discovery, or the representative
+functional checks are incomplete.

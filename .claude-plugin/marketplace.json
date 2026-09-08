@@ -5,7 +5,7 @@
     "email": "support@usekimono.ai",
     "url": "https://usekimono.ai"
   },
-  "description": "Official Kimono plugins for Claude Code and Claude Cowork.",
+  "description": "Kimono plugins for Claude Code.",
   "version": "0.2.0",
   "plugins": [
     {
