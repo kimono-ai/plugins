@@ -1,7 +1,7 @@
 # Kimono
 
-The Kimono plugin connects ChatGPT and Codex to the hosted Kimono MCP endpoint
-at `https://mcp.usekimono.ai/mcp`.
+The Kimono plugin connects ChatGPT, Codex, and Claude Code to the hosted Kimono
+MCP endpoint at `https://mcp.usekimono.ai/mcp`.
 
 Authentication uses the Kimono OAuth flow. Every tool call re-enters Kimono's
 canonical authorization boundaries, preserving the authenticated user's
@@ -15,3 +15,15 @@ The bundled skills cover three workflows:
 
 Write and destructive actions require the matching OAuth scope. Publishing,
 unpublishing, deletion, and cancellation also require explicit user intent.
+
+## Host manifests
+
+- `.codex-plugin/plugin.json` packages the plugin for ChatGPT and Codex.
+- `.claude-plugin/plugin.json` packages the same skills and MCP connection for
+  Claude Code.
+
+Both manifests intentionally point at the same `skills/` and `.mcp.json`
+boundaries so behavior and authorization cannot drift between hosts. The
+Claude directory submission is maintained separately from the curated official
+marketplace; follow the current Anthropic submission form when listing the
+plugin.

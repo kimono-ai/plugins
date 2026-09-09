@@ -1,0 +1,29 @@
+{
+  "name": "kimono",
+  "owner": {
+    "name": "Kimono AI",
+    "email": "support@usekimono.ai",
+    "url": "https://usekimono.ai"
+  },
+  "description": "Kimono plugins for Claude Code.",
+  "version": "0.2.0",
+  "plugins": [
+    {
+      "name": "kimono",
+      "source": "./plugins/kimono",
+      "displayName": "Kimono",
+      "description": "Work with Kimono agents, conversations, Brain analytics, and the agent Builder.",
+      "version": "0.2.0",
+      "author": {
+        "name": "Kimono AI",
+        "email": "support@usekimono.ai",
+        "url": "https://usekimono.ai"
+      },
+      "homepage": "https://usekimono.ai",
+      "repository": "https://github.com/kimono-ai/plugins",
+      "license": "Apache-2.0",
+      "category": "Business & Operations",
+      "tags": ["kimono", "agents", "analytics", "builder", "mcp"]
+    }
+  ]
+}

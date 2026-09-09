@@ -5,33 +5,43 @@ description: Create, inspect, edit, test, publish, unpublish, or delete Kimono a
 
 # Build Kimono Agents
 
-Resolve the exact agent before making changes. Use `agents.inspect` to establish
-the current definition and effective permissions.
+Resolve the exact agent before making changes with `agents_resolve`. Use
+`agents_capabilities` to establish the current runtime identity, effective
+permissions, and blockers. When the write scope is available, use
+`agents_draft_get` to read the structured draft. These are the current MCP tool
+names; use the names returned by the server's catalog exactly.
 
 ## Create or edit
 
-- Use `agents.create` for a new agent and retain the returned agent and Builder
+- Use `agents_create` for a new agent and retain the returned agent and Builder
   thread IDs.
-- Use `agents.edit` for an existing agent. State the intended outcome and
-  constraints, not an unreviewed replacement prompt.
-- Poll `turns.get` until the Builder turn is terminal, then inspect the agent
-  again to verify the resulting draft.
+- Use `agents_draft_patch` for typed blueprint changes and
+  `agents_workflow_patch` for workflow changes. Read the current draft first
+  and send its `baseRevision`; these tools reject stale concurrent edits.
+- Use `agents_validate` and `agents_diff` after an edit, then read the draft
+  again to verify the resulting state. These operations do not publish it.
 
 ## Test
 
-- Use `agents.preview` with a representative prompt.
-- Poll `turns.get` until terminal and compare the final response with the
-  user's acceptance criteria.
-- Iterate through `agents.edit` when the preview does not satisfy the goal.
+- Use `agents_preview` with a representative prompt and the intended
+  `sourceKind` when the user wants to test a draft or published version.
+- Poll `turns_get` with the returned identifiers until terminal and compare the
+  final response with the user's acceptance criteria.
+- Iterate through the structured draft patch tools when the preview does not
+  satisfy the goal.
 
 ## Publish or retire
 
 - Never publish, unpublish, or delete from an inferred intent.
 - Before calling the tool, summarize the exact agent, current status, and
   effect, then obtain explicit confirmation.
-- Supply the current exact agent name and required confirmation fields.
-- Treat deletion as irreversible. Do not set `forceDeleteDefault` unless the
-  user explicitly confirms deletion of a default agent.
+- Use `agents_publish` with the current `expectedSourceHash`,
+  `expectedPublishedVersionId`, and `confirm: true`.
+- Use `agents_unpublish` with the current `expectedName` and `confirm: true`.
+- Use `agents_delete` with the current `expectedName` and `confirm: true`;
+  set `forceDeleteDefault: true` only when the user explicitly confirms
+  deletion of a default agent.
+- Treat deletion as irreversible.
 
 Do not bypass the Builder by editing raw storage, prompts, workflows, or
 versions through another integration.

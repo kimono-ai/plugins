@@ -1,0 +1,16 @@
+{
+  "pluginRepository": "https://github.com/kimono-ai/plugins",
+  "repositoryPath": "plugins/kimono",
+  "homepage": "https://usekimono.ai",
+  "name": "Kimono",
+  "description": "Connect Claude to Kimono agents, private conversations, organizational Brain analytics, and the agent Builder through Kimono's authenticated MCP integration.",
+  "exampleUseCases": [
+    "Ask an accessible Kimono agent for help and continue a private conversation.",
+    "Analyze organization activity and adoption with Kimono Brain.",
+    "Create, edit, test, publish, or retire Kimono agents through the Builder."
+  ],
+  "supportedPlatforms": ["Claude Code"],
+  "license": "Apache-2.0",
+  "privacyPolicyURL": "https://usekimono.ai/privacy",
+  "contactEmail": "marco.aleixo@usekimono.ai"
+}

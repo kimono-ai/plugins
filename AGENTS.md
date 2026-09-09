@@ -1,7 +1,7 @@
 # AGENTS - Kimono plugins
 
 This public repository is the distribution boundary for Kimono plugins used by
-ChatGPT and Codex.
+ChatGPT, Codex, and Claude Code.
 
 - Keep runtime implementation, infrastructure, credentials, customer data,
   internal endpoints, and operational runbooks out of this repository.
