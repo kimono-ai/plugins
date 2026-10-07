@@ -8,6 +8,10 @@ description: Start, continue, inspect, or manage conversations with agents avail
 Preserve the user's language and intent. Treat agent names and conversation
 titles as human labels that require resolution.
 
+Use the tools visible to the connected user. Organization MCP permissions for
+the user's role, OAuth scopes, and each agent or conversation's ACL all apply.
+Do not infer MCP access from the visibility of a platform screen.
+
 1. Call `agents_resolve` with the user's name or description.
 2. If resolution is ambiguous, show the compact candidates and ask the user to
    choose. Never select by recency or fuzzy rank alone.
@@ -28,3 +32,10 @@ titles as human labels that require resolution.
 
 Do not cancel a turn unless the user explicitly asks to stop it. Do not expose
 internal IDs unless needed for disambiguation or troubleshooting.
+
+After an uncertain submission, reuse its original `idempotencyKey` and poll the
+returned identifiers when available; do not send the same message as a new
+submission. `No approval received` without a Kimono error envelope suggests a
+host approval failure, but does not prove its origin or that Kimono received a
+call. Preserve server diagnostic identifiers and follow the returned `phase`
+and `recovery` when present.

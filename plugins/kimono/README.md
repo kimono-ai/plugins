@@ -7,14 +7,94 @@ Authentication uses the Kimono OAuth flow. Every tool call re-enters Kimono's
 canonical authorization boundaries, preserving the authenticated user's
 organization, role, and resource ACLs.
 
-The bundled skills cover three workflows:
+## Product terms and workflows
 
-- conversations with Kimono agents;
-- organization analysis through Brain;
-- agent creation, editing, testing, publication, and retirement.
+| Product surface | Bundled skill | Use |
+| --- | --- | --- |
+| Agente | `use-kimono-agents` | Start, continue, and inspect conversations. |
+| Agente Builder | `build-kimono-agents` | Create, edit, test, publish, and retire agents. |
+| Brain | `analyze-with-kimono-brain` | Analyze operational organization data: usage, people, conversations, and adoption. |
+| Corpus and Intelligence Layer | `use-kimono-intelligence-layer` | Search authorized sources and institutional information; manage explicit proposals and discussions. |
+| Corpus and Intelligence Layer sources | `ingest-kimono-sources` | Send events and documents and verify their processing and search availability. |
 
-Write and destructive actions require the matching OAuth scope. Publishing,
-unpublishing, deletion, and cancellation also require explicit user intent.
+Corpus, Intelligence Layer, and Agente are the same product concepts in the
+platform and MCP. A Corpus contains sources; an Agente can use an attached
+Corpus, and an authorized MCP host can query it directly. Brain's operational
+analytics workflow does not own source ingestion or Intelligence Layer
+governance.
+
+## Access and authorization
+
+Every operation must satisfy three boundaries:
+
+1. the OAuth scopes granted to this MCP connection;
+2. organization MCP permissions configured under **Configurações → MCP →
+   Permissões** for the user's existing role, including custom roles;
+3. the ACL of the specific agent, conversation, Corpus, or destination.
+
+The server filters the catalog by organization MCP permissions. The catalog
+size is a server maximum, not a promise that every user receives every tool.
+`identity_whoami` reports the connection's identity and scopes; it does not
+prove access to every operation. Platform screen visibility is independent of
+headless MCP access.
+
+`KIMONO_MCP_INSUFFICIENT_SCOPE` calls for additional OAuth consent.
+`MCP_PERMISSION_DENIED` requires an organization permission change by an
+authorized administrator. A resource access denial requires the matching ACL;
+reconnecting does not bypass either permission boundary.
+
+Publishing, unpublishing, deletion, cancellation, source revocation, and
+proposal decisions require explicit user intent for the target and effect.
+An existing explicit request for that same action is sufficient; do not ask
+for repetitive conversational confirmation. A host may still require tool
+approval independently.
+
+## Search and ingestion
+
+`knowledge_search` defaults to `current`: published document evidence and
+accepted current semantic information. `knowledge` searches accepted semantic
+nodes only; `sources` is for explicit historical evidence investigations.
+Documents are evidence and do not automatically become accepted facts. Retain
+returned IDs, revisions, and processing versions when citing sources.
+
+An accepted event, successful signed upload, finalized attachment, and sealed
+session represent separate stages. `context_ingest_session_status` reports the
+session. `context_ingest_artifact_status` takes `sessionId` and `artifactId` and
+reports each institutional artifact's state, processing job, and semantic
+interpretation separately. Check every attachment independently from the JSONL
+artifact produced when an institutional session is closed.
+
+`publicationRecorded` is a persisted receipt; verify actual availability with
+a `current` search and evidence read. Document extraction and publication
+precede optional later semantic interpretation by the organization's heartbeat.
+A search error is not normal heartbeat lag. Project-targeted sessions use the
+project-file destination and can return null artifact and job IDs on close;
+preserve their individual file results.
+
+## Error recovery
+
+Kimono errors retain `code`, `message`, and correlation IDs when available.
+The newer contract also exposes `phase` and `recovery`, with
+`retryAfterSeconds` for capacity delays:
+
+| Recovery | Action |
+| --- | --- |
+| `retry_read` | Wait the reported delay before retrying the read. Stop repeated failures and retain diagnostic IDs. |
+| `reconcile_before_retry` | Read the affected resource and establish whether the mutation took effect before resending. |
+| `reauthorize` | Complete the required OAuth authorization for the connection. |
+| `check_permissions` | Check organization MCP permissions and the resource ACL. |
+| `refresh_state` | Read the current resource revision before applying the intended change. |
+| `investigate` | Preserve the error and diagnostic IDs instead of inventing a cause or repeating blindly. |
+
+For an uncertain `agents_draft_patch`, read `agents_draft_get` and
+`agents_diff`. Verify an already applied change or submit the remaining change
+with the current `baseRevision`; never blindly resend the old patch.
+
+`No approval received` without a Kimono error envelope suggests the host's
+approval flow. Its wording alone does not prove where the failure occurred or
+whether Kimono received a call. Check host approval and retain any returned
+`requestId`, `operationId`, and `deploymentId` for execution tracing. Do not
+label an unexplained error as a payload size limit or rate limit.
 
 ## Host manifests
 

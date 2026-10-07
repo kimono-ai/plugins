@@ -1,0 +1,4 @@
+interface:
+  display_name: "Use Kimono Intelligence Layer"
+  short_description: "Search Corpora and manage institutional information"
+  default_prompt: "Use $use-kimono-intelligence-layer to answer from my accessible Corpora and cite the sources."

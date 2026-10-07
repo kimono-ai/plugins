@@ -1,12 +1,18 @@
 ---
 name: analyze-with-kimono-brain
-description: Ask the Kimono Brain to analyze organization-authorized usage, users, agents, conversations, adoption, or recent activity. Use when the user requests organizational metrics, investigation, comparisons, trends, or evidence that an administrator could obtain through the Kimono Brain.
+description: Analyze authorized operational organization data with Kimono Brain, including usage, users, agents, conversations, adoption, and recent activity. Use for organizational metrics and investigations; use the Intelligence Layer skill for Corpus sources and institutional information.
 ---
 
 # Analyze with Kimono Brain
 
 Use Brain as the analyst; do not invent organizational facts from plugin
 metadata or prior chat context.
+
+Brain analyzes operational organization data. Corpus and the Intelligence
+Layer have their own published tools; do not route source ingestion, source
+search, or information governance through Brain. Use only tools exposed to the
+connected user; OAuth consent does not override the organization's MCP
+permissions for the user's role or resource ACLs.
 
 1. Resolve `Brain` with `agents_resolve`, preferring a published agent that the
    user can start a chat with. Inspect the returned status and ask the user to

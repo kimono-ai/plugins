@@ -3,13 +3,17 @@
   "repositoryPath": "plugins/kimono",
   "homepage": "https://usekimono.ai",
   "name": "Kimono",
-  "description": "Connect Claude to Kimono agents, private conversations, organizational Brain analytics, and the agent Builder through Kimono's authenticated MCP integration.",
+  "description": "Work with Kimono Agentes, Corpora, Intelligence Layer, Brain analytics, and Builder.",
   "exampleUseCases": [
     "Ask an accessible Kimono agent for help and continue a private conversation.",
     "Analyze organization activity and adoption with Kimono Brain.",
-    "Create, edit, test, publish, or retire Kimono agents through the Builder."
+    "Create, edit, test, publish, or retire Kimono agents through the Builder.",
+    "Search authorized Corpora and institutional information in the Intelligence Layer with source evidence.",
+    "Ingest source events and documents and verify each artifact before claiming search availability."
   ],
-  "supportedPlatforms": ["Claude Code"],
+  "supportedPlatforms": [
+    "Claude Code"
+  ],
   "license": "Apache-2.0",
   "privacyPolicyURL": "https://usekimono.ai/privacy",
   "contactEmail": "marco.aleixo@usekimono.ai"
