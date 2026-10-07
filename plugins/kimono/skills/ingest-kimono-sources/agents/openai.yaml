@@ -1,0 +1,4 @@
+interface:
+  display_name: "Ingest Kimono Sources"
+  short_description: "Upload sources and verify their processing in Kimono"
+  default_prompt: "Use $ingest-kimono-sources to add my source documents to the selected Kimono destination."

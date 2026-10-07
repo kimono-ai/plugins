@@ -1,7 +1,7 @@
 {
   "name": "kimono",
-  "version": "0.2.0",
-  "description": "Work with Kimono agents, conversations, Brain analytics, and the agent Builder.",
+  "version": "0.3.0",
+  "description": "Work with Kimono Agentes, Corpora, Intelligence Layer, Brain analytics, and Builder.",
   "author": {
     "name": "Kimono AI",
     "email": "support@usekimono.ai",
@@ -10,23 +10,35 @@
   "homepage": "https://usekimono.ai",
   "repository": "https://github.com/kimono-ai/plugins",
   "license": "Apache-2.0",
-  "keywords": ["kimono", "agents", "brain", "analytics", "builder", "mcp"],
+  "keywords": [
+    "kimono",
+    "agents",
+    "corpus",
+    "intelligence-layer",
+    "brain",
+    "builder",
+    "mcp"
+  ],
   "skills": "./skills/",
   "mcpServers": "./.mcp.json",
   "interface": {
     "displayName": "Kimono",
-    "shortDescription": "Build and use Kimono agents",
-    "longDescription": "Resolve and inspect accessible Kimono agents, start or continue private conversations, run organizational analysis with Brain, and create, edit, test, publish, or retire agents through the canonical Kimono Builder.",
+    "shortDescription": "Agentes e Corpus",
+    "longDescription": "Use accessible Kimono Agentes and private conversations, analyze operational organization data with Brain, search Corpora and the Intelligence Layer, ingest sources with processing verification, and build, test, publish, or retire Agentes through the canonical Builder. OAuth scopes, organization MCP permissions for dynamic roles, and resource ACLs govern every operation.",
     "developerName": "Kimono AI",
     "category": "Business & Operations",
-    "capabilities": ["Interactive", "Read", "Write"],
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
     "websiteURL": "https://usekimono.ai",
     "privacyPolicyURL": "https://usekimono.ai/privacy",
     "termsOfServiceURL": "https://usekimono.ai/terms",
     "defaultPrompt": [
-      "Ask one of my Kimono agents for help",
-      "Analyze my organization with Brain",
-      "Help me improve and test a Kimono agent"
+      "Ask one of my Kimono Agentes for help",
+      "Answer from my Corpora and cite evidence",
+      "Help me improve and test a Kimono Agente"
     ],
     "brandColor": "#111827",
     "composerIcon": "./assets/kimono-icon.png",

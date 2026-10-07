@@ -24,6 +24,9 @@ After installation, authenticate with your Kimono account. Kimono derives the
 organization and effective permissions from that account; the plugin cannot
 select or cross organization boundaries.
 
+For installation and authorization instructions for other MCP hosts, use the
+[Kimono installation guide](https://app.usekimono.ai/install.md).
+
 ## Install from Claude Code
 
 Add the public Kimono marketplace and install the plugin:
@@ -41,9 +44,32 @@ Anthropic's curated official marketplace is separate.
 
 ## Available plugin
 
-- [`kimono`](./plugins/kimono): interact with accessible agents, continue or
-  start conversations, analyze organization activity with Brain, and operate
-  the canonical agent Builder.
+- [`kimono`](./plugins/kimono): use and build Agentes, analyze operational
+  organization data with Brain, search Corpora and the Intelligence Layer,
+  and ingest source events and documents with processing verification.
+
+## Update an installed plugin
+
+The hosted MCP catalog and bundled skills update separately. A newer server
+can expose tools while an older installed plugin still has outdated guidance.
+
+In Codex, refresh the Git marketplace with
+`codex plugin marketplace upgrade kimono`, then apply the available plugin
+update in your host and start a new conversation to load the updated skills.
+For Claude Code:
+
+```bash
+claude plugin update kimono@kimono
+```
+
+Run `/reload-plugins` in the active Claude session or restart it. Third-party
+marketplaces do not auto-update by default; see
+[Claude's update instructions](https://code.claude.com/docs/en/discover-plugins#keep-plugins-updated).
+
+Refresh or reconnect the MCP catalog when published tool schemas change.
+Additional OAuth consent is needed only for missing scopes; reconnecting does
+not grant organization MCP permissions or resource access. See the
+[plugin's access and recovery guidance](./plugins/kimono/README.md).
 
 ## Security and support
 

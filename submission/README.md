@@ -15,8 +15,9 @@ Before submitting a release through the OpenAI plugin portal:
    `OPENAI_APPS_CHALLENGE_TOKEN` and verify
    `/.well-known/openai-apps-challenge`;
 3. scan the production tools and confirm the advertised annotations;
-4. test all eight cases in both ChatGPT and Codex;
-5. record a short HTTPS-hosted demo covering Brain, conversations, and Builder;
+4. test all versioned cases in both ChatGPT and Codex;
+5. record a short HTTPS-hosted demo covering the advertised agent, Brain,
+   Corpus, Intelligence Layer, and ingestion workflows;
 6. enter reviewer credentials only in the portal—never commit them here;
 7. after the MCP connection is registered, add its `asdk_app...` identifier in
    `plugins/kimono/.app.json` and reference it from the plugin manifest.
@@ -32,10 +33,10 @@ directory form:
 
 1. run `claude plugin validate . --strict` from the repository root;
 2. add the local marketplace and install `kimono@kimono`;
-3. confirm all three namespaced skills are discoverable;
+3. confirm all five namespaced skills are discoverable;
 4. authenticate the plugin-provided `kimono` MCP server through `/mcp`;
-5. exercise a read-only conversation and Brain request with a restricted test
-   user before testing Builder mutations;
+5. exercise a conversation, Brain request, and Corpus search with a restricted
+   test user, then validate explicitly authorized Builder and ingestion writes;
 6. confirm the listing still matches `anthropic-directory.json`.
 
 Third-party approvals are reviewed for the community marketplace; the curated

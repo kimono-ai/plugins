@@ -45,6 +45,16 @@ SUBMISSION_MCP_TOOL_NAMES = {
     "turns_submit",
     "turns_get",
     "turns_cancel",
+    "context_spaces_search",
+    "knowledge_search",
+    "knowledge_evidence_read",
+    "context_ingest_session_open",
+    "context_ingest_session_append",
+    "context_ingest_session_close",
+    "context_ingest_session_status",
+    "context_ingest_attachment_prepare",
+    "context_ingest_attachment_finalize",
+    "context_ingest_artifact_status",
 }
 
 LEGACY_DOTTED_TOOL_NAMES = {
@@ -154,17 +164,17 @@ def main():
     assert len(listing["longDescription"]) <= 4_000
     for key in ("websiteURL", "supportURL", "privacyPolicyURL", "termsOfServiceURL"):
         assert listing[key].startswith("https://"), f"Invalid submission {key}"
-    assert len(submission["testCases"]["positive"]) == 5
+    assert len(submission["testCases"]["positive"]) == 7
     assert len(submission["testCases"]["negative"]) == 3
     for case in submission["testCases"]["positive"]:
         unknown_tools = set(case["expectedTools"]) - SUBMISSION_MCP_TOOL_NAMES
         assert not unknown_tools, f"Unknown MCP tools in test case: {sorted(unknown_tools)}"
     justifications = submission["toolAnnotationJustifications"]
-    assert len(justifications) == 15
+    assert len(justifications) == len(SUBMISSION_MCP_TOOL_NAMES)
     justification_tools = {entry["tool"] for entry in justifications}
     assert (
         justification_tools == SUBMISSION_MCP_TOOL_NAMES
-    ), "Directory annotations must cover the current MCP tool contract"
+    ), "Directory annotations must cover the advertised MCP tools"
     assert all(entry["readOnly"] and entry["destructive"] and entry["openWorld"] for entry in justifications)
     anthropic_submission = load_json(ANTHROPIC_SUBMISSION_PATH)
     assert anthropic_submission["pluginRepository"] == "https://github.com/kimono-ai/plugins"

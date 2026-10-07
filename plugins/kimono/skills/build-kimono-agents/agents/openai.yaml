@@ -1,4 +1,4 @@
 interface:
   display_name: "Build Kimono Agents"
   short_description: "Create, edit, test, and publish Kimono agents"
-  default_prompt: "Help me improve and test a Kimono agent."
+  default_prompt: "Use $build-kimono-agents to improve and test my Kimono Agente."

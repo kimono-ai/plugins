@@ -2,8 +2,8 @@
   "mcpServerURL": "https://mcp.usekimono.ai/mcp",
   "listing": {
     "displayName": "Kimono",
-    "shortDescription": "Build and use Kimono agents",
-    "longDescription": "Resolve and inspect accessible Kimono agents, start or continue private conversations, run organizational analysis with Brain, and create, edit, test, publish, or retire agents through the canonical Kimono Builder.",
+    "shortDescription": "Agentes e Corpus",
+    "longDescription": "Use accessible Kimono Agentes and private conversations, analyze operational organization data with Brain, search Corpora and the Intelligence Layer, ingest sources with processing verification, and build, test, publish, or retire Agentes through the canonical Builder. OAuth scopes, organization MCP permissions for dynamic roles, and resource ACLs govern every operation.",
     "developerName": "Kimono AI",
     "category": "Business & Operations",
     "websiteURL": "https://usekimono.ai",
@@ -11,7 +11,7 @@
     "privacyPolicyURL": "https://usekimono.ai/privacy",
     "termsOfServiceURL": "https://usekimono.ai/terms"
   },
-  "releaseNotes": "Release 0.2.0 aligns the shared Kimono plugin package and MCP tool contract while preserving agents, conversations, Brain analytics, and Builder workflows for ChatGPT and Codex.",
+  "releaseNotes": "Release 0.3.0 adds Corpus and Intelligence Layer workflows and source ingestion verification. It keeps Brain focused on operational analytics, respects dynamic organization role MCP permissions, and adds safe recovery for uncertain edits and capacity errors. Deploy the matching MCP artifact-status and error-recovery contract before directory submission.",
   "testCases": {
     "positive": [
       {
@@ -54,6 +54,30 @@
           "agents_create"
         ],
         "expectedBehavior": "Start the canonical Builder with the requested objective and leave the resulting agent as an unpublished draft."
+      },
+      {
+        "prompt": "Find my accessible Corpus called Demo handbook, answer from its published documents, and cite the evidence. Do not modify anything.",
+        "expectedTools": [
+          "context_spaces_search",
+          "knowledge_search",
+          "knowledge_evidence_read"
+        ],
+        "expectedBehavior": "Resolve an accessible Corpus, scope a default current search to its returned space ID, and read and cite source evidence including revisions when available. Never treat a search failure as empty results or a document as an automatically accepted fact."
+      },
+      {
+        "prompt": "Add the provided demo document and source event to the specified demo Corpus, then verify processing and search availability. Do not use a different destination.",
+        "expectedTools": [
+          "context_ingest_session_open",
+          "context_ingest_session_append",
+          "context_ingest_attachment_prepare",
+          "context_ingest_attachment_finalize",
+          "context_ingest_session_close",
+          "context_ingest_session_status",
+          "context_ingest_artifact_status",
+          "knowledge_search",
+          "knowledge_evidence_read"
+        ],
+        "expectedBehavior": "Use the authorized destination and stable idempotency/event IDs; upload bytes only to the returned signed URL. Inspect each attachment independently from the sealed session artifact, distinguish deterministic publication from later semantic interpretation, and verify actual current search and source evidence rather than claiming success from queued or publicationRecorded alone."
       }
     ],
     "negative": [
@@ -108,7 +132,7 @@
     {
       "tool": "agents_publish",
       "readOnly": "Changes an agent from draft to published within Kimono.",
-      "destructive": "It is marked destructive because publication changes operational availability for organization users, even though agents_unpublish can reverse it; it requires the exact expected name and explicit confirmation.",
+      "destructive": "Publication changes operational availability for organization users, even though agents_unpublish can reverse it; the current source hash and published version guards and explicit intent protect the target.",
       "openWorld": "Publication changes availability only inside the authenticated Kimono organization."
     },
     {
@@ -120,7 +144,7 @@
     {
       "tool": "agents_delete",
       "readOnly": "Permanently deletes an agent and therefore changes state.",
-      "destructive": "Deletion is irreversible, requires the exact current name and explicit confirmation, and adds a separate guard for default agents.",
+      "destructive": "Deletion is irreversible, requires the exact current name and explicit intent, and adds a separate guard for default agents.",
       "openWorld": "Deletion affects only a private first-party Kimono resource."
     },
     {
@@ -164,6 +188,66 @@
       "readOnly": "Cancels an in-flight agent turn and changes its execution state.",
       "destructive": "Cancellation irreversibly stops the current run and requires explicit confirmation.",
       "openWorld": "Cancellation affects only the private Kimono runtime."
+    },
+    {
+      "tool": "context_spaces_search",
+      "readOnly": "Reads accessible Corpora and authorized sharing destinations without changing them.",
+      "destructive": "It cannot change, overwrite, revoke, or delete the inspected resource.",
+      "openWorld": "It reads private first-party Kimono state within the authenticated organization."
+    },
+    {
+      "tool": "knowledge_search",
+      "readOnly": "Reads source evidence and institutional information within authorized spaces without changing state.",
+      "destructive": "It cannot change, overwrite, revoke, or delete the inspected resource.",
+      "openWorld": "It reads private first-party Kimono state within the authenticated organization."
+    },
+    {
+      "tool": "knowledge_evidence_read",
+      "readOnly": "Reads evidence and its revision inside the authenticated resource ACL boundary.",
+      "destructive": "It cannot change, overwrite, revoke, or delete the inspected resource.",
+      "openWorld": "It reads private first-party Kimono state within the authenticated organization."
+    },
+    {
+      "tool": "context_ingest_session_status",
+      "readOnly": "Reads an authorized ingestion session without advancing or changing processing.",
+      "destructive": "It cannot change, overwrite, revoke, or delete the inspected resource.",
+      "openWorld": "It reads private first-party Kimono state within the authenticated organization."
+    },
+    {
+      "tool": "context_ingest_artifact_status",
+      "readOnly": "Reads an artifact tied to an authorized session, its processing job, and semantic state without changing them.",
+      "destructive": "It cannot change, overwrite, revoke, or delete the inspected resource.",
+      "openWorld": "It reads private first-party Kimono state within the authenticated organization."
+    },
+    {
+      "tool": "context_ingest_session_open",
+      "readOnly": "Creates an authorized append-only ingestion session. It therefore changes Kimono state.",
+      "destructive": "The operation adds or seals source evidence without deleting or overwriting accepted information.",
+      "openWorld": "It operates on first-party Kimono resources inside the authorized destination."
+    },
+    {
+      "tool": "context_ingest_session_append",
+      "readOnly": "Persists source events with source and event-ID deduplication. It therefore changes Kimono state.",
+      "destructive": "The operation adds or seals source evidence without deleting or overwriting accepted information.",
+      "openWorld": "It operates on first-party Kimono resources inside the authorized destination."
+    },
+    {
+      "tool": "context_ingest_attachment_prepare",
+      "readOnly": "Prepares an authorized attachment upload and returns a signed first-party upload URL. It therefore changes Kimono state.",
+      "destructive": "The operation adds or seals source evidence without deleting or overwriting accepted information.",
+      "openWorld": "It operates on first-party Kimono resources inside the authorized destination."
+    },
+    {
+      "tool": "context_ingest_attachment_finalize",
+      "readOnly": "Confirms an uploaded attachment and queues canonical document processing. It therefore changes Kimono state.",
+      "destructive": "The operation adds or seals source evidence without deleting or overwriting accepted information.",
+      "openWorld": "It operates on first-party Kimono resources inside the authorized destination."
+    },
+    {
+      "tool": "context_ingest_session_close",
+      "readOnly": "Seals the ingestion session and queues its canonical institutional artifact when applicable. It therefore changes Kimono state.",
+      "destructive": "The operation adds or seals source evidence without deleting or overwriting accepted information.",
+      "openWorld": "It operates on first-party Kimono resources inside the authorized destination."
     }
   ]
 }

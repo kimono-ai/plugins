@@ -11,6 +11,10 @@ permissions, and blockers. When the write scope is available, use
 `agents_draft_get` to read the structured draft. These are the current MCP tool
 names; use the names returned by the server's catalog exactly.
 
+The catalog is filtered by the organization's MCP permissions for the user's
+existing role. Matching OAuth scopes and resource access are also required;
+reconnecting cannot override a denied organization permission.
+
 ## Create or edit
 
 - Use `agents_create` for a new agent and retain the returned agent and Builder
@@ -33,8 +37,10 @@ names; use the names returned by the server's catalog exactly.
 ## Publish or retire
 
 - Never publish, unpublish, or delete from an inferred intent.
-- Before calling the tool, summarize the exact agent, current status, and
-  effect, then obtain explicit confirmation.
+- Proceed when the user has already explicitly authorized the exact agent and
+  effect. Summarize the concrete change before execution; ask for confirmation
+  only when the target or effect is not authorized. A host's mandatory tool
+  approval remains separate from conversational authorization.
 - Use `agents_publish` with the current `expectedSourceHash`,
   `expectedPublishedVersionId`, and `confirm: true`.
 - Use `agents_unpublish` with the current `expectedName` and `confirm: true`.
@@ -45,3 +51,20 @@ names; use the names returned by the server's catalog exactly.
 
 Do not bypass the Builder by editing raw storage, prompts, workflows, or
 versions through another integration.
+
+## Recover a failed edit
+
+- `No approval received` without a Kimono error envelope suggests a host
+  approval failure; the wording alone does not prove its origin or that Kimono
+  received a call. Check the host's approval state and use any server diagnostic
+  IDs to establish execution before claiming a rejection or applied edit.
+- On transport failure, response-contract failure, or an error with unknown
+  mutation outcome, read `agents_draft_get` and `agents_diff` before retrying.
+  Compare the current draft and revision with the intended patch. If it was
+  applied, verify it; otherwise use the current `baseRevision` for any remaining
+  change. Never blindly resend a non-idempotent patch.
+- Preserve the returned `code`, `requestId`, `operationId`, and `deploymentId`
+  for troubleshooting. Follow `recovery` and `phase` when present; wait
+  `retryAfterSeconds` for a retryable read. `reconcile_before_retry` requires
+  reading the affected state before resubmission. A generic failure is not
+  evidence of a size limit or rate limit.
