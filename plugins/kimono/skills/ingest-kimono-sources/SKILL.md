@@ -20,15 +20,23 @@ ACLs all apply. Do not derive write access from platform screen visibility.
 2. Append JSON CloudEvents with `context_ingest_session_append` in batches of
    at most 100. Preserve `source`, event `id`, and original `time`; reusing the
    source and event ID deduplicates retries. Include at least one source event
-   before closing a session.
+   before closing an institutional session. Project sessions require
+   `ai.kimono.source.file.snapshot` events, with `source` matching the session,
+   `subject` as the source file ID, and `data: {name, revision}`. Follow returned
+   `fileDecisions`: upload files requiring an add or update, and avoid duplicate
+   uploads for unchanged or pending files.
 3. For each document, call `context_ingest_attachment_prepare` with metadata.
-   Upload bytes with a PUT to the exact returned signed URL and use
-   `requiredHeaders`. Keep the URL and receipt token private; do not place
+   Upload bytes with a PUT to the exact returned signed URL: institutional
+   attachments return `uploadUrl` and `requiredHeaders`; project files return
+   `url` and a workspace receipt. Use required headers when provided and the
+   declared file MIME type. Keep URLs and receipt tokens private; do not place
    binary content in MCP JSON. Respect expiry and do not forward credentials to
    an unrelated endpoint.
 4. After a successful upload, call `context_ingest_attachment_finalize` with
-   the returned receipt. Retain each returned artifact ID and processing job
-   ID independently; they are not the session's JSONL artifact.
+   the returned receipt and source event ID. Retain each institutional
+   `artifactId` and `deterministicJobId` independently; they are not the
+   session's JSONL artifact. For project files retain the returned `fileId`,
+   `documentId`, `jobId`, and `workflowId` instead of fabricating artifact IDs.
 5. Close the session with `context_ingest_session_close`. An institutional
    session seals its event artifact and queues processing. A project-targeted
    session uses the project-file flow and may return null artifact and job IDs
