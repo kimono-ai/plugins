@@ -1,6 +1,6 @@
 {
   "name": "kimono",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Work with Kimono Agentes, Corpora, Intelligence Layer, Brain analytics, and Builder.",
   "author": {
     "name": "Kimono AI",
@@ -24,7 +24,7 @@
   "interface": {
     "displayName": "Kimono",
     "shortDescription": "Agentes e Corpus",
-    "longDescription": "Use accessible Kimono Agentes and private conversations, analyze operational organization data with Brain, search Corpora and the Intelligence Layer, ingest sources with processing verification, and build, test, publish, or retire Agentes through the canonical Builder. OAuth scopes, organization MCP permissions for dynamic roles, and resource ACLs govern every operation.",
+    "longDescription": "Use accessible Kimono Agentes and private conversations, analyze operational organization data with Brain, search Corpora and the Intelligence Layer, manage Corpora, sources, files, and Agente access, ingest source events with processing verification, and build, test, publish, or retire Agentes through the canonical Builder. OAuth scopes, organization MCP permissions for dynamic roles, and resource authorization govern every operation.",
     "developerName": "Kimono AI",
     "category": "Business & Operations",
     "capabilities": [

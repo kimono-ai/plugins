@@ -1,0 +1,4 @@
+interface:
+  display_name: "Manage Kimono Corpora"
+  short_description: "Manage Corpora, sources, files, and Agente access"
+  default_prompt: "Use $manage-kimono-corpora to manage the selected Corpus and verify the requested changes."

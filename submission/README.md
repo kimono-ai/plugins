@@ -33,10 +33,11 @@ directory form:
 
 1. run `claude plugin validate . --strict` from the repository root;
 2. add the local marketplace and install `kimono@kimono`;
-3. confirm all five namespaced skills are discoverable;
+3. confirm all six namespaced skills are discoverable;
 4. authenticate the plugin-provided `kimono` MCP server through `/mcp`;
 5. exercise a conversation, Brain request, and Corpus search with a restricted
-   test user, then validate explicitly authorized Builder and ingestion writes;
+   test user, then validate explicitly authorized Builder, Corpus management,
+   and ingestion writes;
 6. confirm the listing still matches `anthropic-directory.json`.
 
 Third-party approvals are reviewed for the community marketplace; the curated

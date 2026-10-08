@@ -3,7 +3,7 @@
   "listing": {
     "displayName": "Kimono",
     "shortDescription": "Agentes e Corpus",
-    "longDescription": "Use accessible Kimono Agentes and private conversations, analyze operational organization data with Brain, search Corpora and the Intelligence Layer, ingest sources with processing verification, and build, test, publish, or retire Agentes through the canonical Builder. OAuth scopes, organization MCP permissions for dynamic roles, and resource ACLs govern every operation.",
+    "longDescription": "Use accessible Kimono Agentes and private conversations, analyze operational organization data with Brain, search Corpora and the Intelligence Layer, manage Corpora, sources, files, and Agente access, ingest source events with processing verification, and build, test, publish, or retire Agentes through the canonical Builder. OAuth scopes, organization MCP permissions for dynamic roles, and resource authorization govern every operation.",
     "developerName": "Kimono AI",
     "category": "Business & Operations",
     "websiteURL": "https://usekimono.ai",
@@ -11,7 +11,7 @@
     "privacyPolicyURL": "https://usekimono.ai/privacy",
     "termsOfServiceURL": "https://usekimono.ai/terms"
   },
-  "releaseNotes": "Release 0.3.0 adds Corpus and Intelligence Layer workflows and source ingestion verification. It keeps Brain focused on operational analytics, respects dynamic organization role MCP permissions, and adds safe recovery for uncertain edits and capacity errors. Deploy the matching MCP artifact-status and error-recovery contract before directory submission.",
+  "releaseNotes": "Release 0.4.0 adds Corpus lifecycle, manual-upload and connected Google Drive sources, per-file inventory and processing retries, and Agente access management. Uses dynamic role MCP permissions, resource authorization, source-bound signed uploads, generation fences, and reconciliation of uncertain writes. Deploy the matching corpus_* catalog before directory submission; no directory publication is performed by this release.",
   "testCases": {
     "positive": [
       {
@@ -65,7 +65,7 @@
         "expectedBehavior": "Resolve an accessible Corpus, scope a default current search to its returned space ID, and read and cite source evidence including revisions when available. Never treat a search failure as empty results or a document as an automatically accepted fact."
       },
       {
-        "prompt": "Add the provided demo document and source event to the specified demo Corpus, then verify processing and search availability. Do not use a different destination.",
+        "prompt": "Add the provided demo document and source event stream to the specified institutional destination, then verify processing and search availability. Do not use a different destination.",
         "expectedTools": [
           "context_ingest_session_open",
           "context_ingest_session_append",
@@ -77,7 +77,35 @@
           "knowledge_search",
           "knowledge_evidence_read"
         ],
-        "expectedBehavior": "Use the authorized destination and stable idempotency/event IDs; upload bytes only to the returned signed URL. Inspect each attachment independently from the sealed session artifact, distinguish deterministic publication from later semantic interpretation, and verify actual current search and source evidence rather than claiming success from queued or publicationRecorded alone."
+        "expectedBehavior": "Use the authorized destination and stable idempotency/event IDs; upload bytes only to the returned signed URL. Inspect each attachment independently from the sealed session artifact, distinguish deterministic publication from later semantic interpretation, and verify actual current search and source evidence rather than claiming success from queued or publicationRecorded alone. A targetSpaceId alone does not register the artifact in a Corpus source inventory; use source-bound Corpus upload tools for that separate requirement."
+      },
+      {
+        "prompt": "Create a demo Corpus named Review handbook, add a manual-upload source, upload the supplied demo document there, and grant access to the specified authorized published demo Agente. Do not edit or publish the Agente.",
+        "expectedTools": [
+          "corpus_list",
+          "corpus_create",
+          "corpus_get",
+          "corpus_source_create",
+          "corpus_upload_prepare",
+          "corpus_upload_finalize",
+          "corpus_source_files_list",
+          "corpus_agent_grants_replace",
+          "knowledge_search",
+          "knowledge_evidence_read"
+        ],
+        "expectedBehavior": "Use only authorized resources and existing explicit intent. Create the nested source payload with a stable idempotency key; PUT bytes only to the returned signed URL and finalize using its signed receipt under the same Corpus and source. Verify file processing independently from acceptance and use the Corpus spaceId for current search and evidence. Read visible grants and eligible published Agentes; use the current expectedAccessGeneration and confirm field for the complete intended visible grant set without configuring or publishing the Agente. Preserve existing active:true grants unless revocation was requested; do not reactivate active:false grants without that request. If a write outcome is uncertain, read the affected resource before retrying."
+      },
+      {
+        "prompt": "Add the requested Google Drive folder to the specified demo Corpus using my Google account already connected to Kimono. Synchronize it and report the observed state.",
+        "expectedTools": [
+          "corpus_get",
+          "corpus_drive_roots",
+          "corpus_drive_children",
+          "corpus_source_create",
+          "corpus_source_sync",
+          "corpus_source_files_list"
+        ],
+        "expectedBehavior": "Discover roots through the Kimono-connected account with both required MCP permissions and scopes. Select only folders returned under live authorization, use a stable source idempotency key in the nested source payload, and distinguish synchronization requested, processing underway, and availability verified. Do not request Google tokens or use host credentials, another account, S3, or private APIs."
       }
     ],
     "negative": [
@@ -248,6 +276,126 @@
       "readOnly": "Seals the ingestion session and queues its canonical institutional artifact when applicable. It therefore changes Kimono state.",
       "destructive": "The operation adds or seals source evidence without deleting or overwriting accepted information.",
       "openWorld": "It operates on first-party Kimono resources inside the authorized destination."
+    },
+    {
+      "tool": "corpus_list",
+      "readOnly": "Lists authorized Corpora and their capabilities. It reads without changing Kimono state.",
+      "destructive": "The operation retains resources and uses canonical generation, idempotency, receipt, or authorization guards as applicable.",
+      "openWorld": "It operates on private first-party Kimono resources in the authenticated organization."
+    },
+    {
+      "tool": "corpus_get",
+      "readOnly": "Reads the selected Corpus, sources, visible Agente grants, and eligible Agentes. It reads without changing Kimono state.",
+      "destructive": "The operation retains resources and uses canonical generation, idempotency, receipt, or authorization guards as applicable.",
+      "openWorld": "It operates on private first-party Kimono resources in the authenticated organization."
+    },
+    {
+      "tool": "corpus_files_list",
+      "readOnly": "Reads the selected Corpus file inventory and processing state. It reads without changing Kimono state.",
+      "destructive": "The operation retains resources and uses canonical generation, idempotency, receipt, or authorization guards as applicable.",
+      "openWorld": "It operates on private first-party Kimono resources in the authenticated organization."
+    },
+    {
+      "tool": "corpus_source_files_list",
+      "readOnly": "Reads files and processing state under the selected authorized source. It reads without changing Kimono state.",
+      "destructive": "The operation retains resources and uses canonical generation, idempotency, receipt, or authorization guards as applicable.",
+      "openWorld": "It operates on private first-party Kimono resources in the authenticated organization."
+    },
+    {
+      "tool": "corpus_agent_access_list",
+      "readOnly": "Reads Corpus grants for an authorized Agente through the Builder-authorized entrypoint. It reads without changing Kimono state.",
+      "destructive": "The operation retains resources and uses canonical generation, idempotency, receipt, or authorization guards as applicable.",
+      "openWorld": "It operates on private first-party Kimono resources in the authenticated organization."
+    },
+    {
+      "tool": "corpus_drive_roots",
+      "readOnly": "Reads selectable roots through the Google account connected to Kimono under live authorization. It reads without changing Kimono state.",
+      "destructive": "The operation retains resources and uses canonical generation, idempotency, receipt, or authorization guards as applicable.",
+      "openWorld": "The operation may access the user-authorized Google Drive connection; all selection and synchronization remain inside the authenticated Kimono organization policy."
+    },
+    {
+      "tool": "corpus_drive_children",
+      "readOnly": "Reads folders through the authorized Google account and root scope. It reads without changing Kimono state.",
+      "destructive": "The operation retains resources and uses canonical generation, idempotency, receipt, or authorization guards as applicable.",
+      "openWorld": "The operation may access the user-authorized Google Drive connection; all selection and synchronization remain inside the authenticated Kimono organization policy."
+    },
+    {
+      "tool": "corpus_create",
+      "readOnly": "Creates a new organization Corpus. It changes Kimono state.",
+      "destructive": "The operation retains resources and uses canonical generation, idempotency, receipt, or authorization guards as applicable.",
+      "openWorld": "It operates on private first-party Kimono resources in the authenticated organization."
+    },
+    {
+      "tool": "corpus_update",
+      "readOnly": "Updates Corpus name or description using the current access generation. It changes Kimono state.",
+      "destructive": "The operation retains resources and uses canonical generation, idempotency, receipt, or authorization guards as applicable.",
+      "openWorld": "It operates on private first-party Kimono resources in the authenticated organization."
+    },
+    {
+      "tool": "corpus_source_create",
+      "readOnly": "Creates an authorized manual-upload or connected Google Drive source with a stable idempotency key. It changes Kimono state.",
+      "destructive": "The operation retains resources and uses canonical generation, idempotency, receipt, or authorization guards as applicable.",
+      "openWorld": "The operation may access the user-authorized Google Drive connection; all selection and synchronization remain inside the authenticated Kimono organization policy."
+    },
+    {
+      "tool": "corpus_source_update",
+      "readOnly": "Changes selected Drive roots using the current sync generation and live connection authorization. It changes Kimono state.",
+      "destructive": "The operation retains resources and uses canonical generation, idempotency, receipt, or authorization guards as applicable.",
+      "openWorld": "The operation may access the user-authorized Google Drive connection; all selection and synchronization remain inside the authenticated Kimono organization policy."
+    },
+    {
+      "tool": "corpus_source_resume",
+      "readOnly": "Resumes the selected source through the canonical source lifecycle. It changes Kimono state.",
+      "destructive": "The operation retains resources and uses canonical generation, idempotency, receipt, or authorization guards as applicable.",
+      "openWorld": "The operation may resume a configured Google Drive source; later access uses the existing authorized Kimono connection rather than host credentials."
+    },
+    {
+      "tool": "corpus_source_sync",
+      "readOnly": "Requests synchronization of the selected source using its configured connection. It changes Kimono state.",
+      "destructive": "The operation retains resources and uses canonical generation, idempotency, receipt, or authorization guards as applicable.",
+      "openWorld": "The operation may access the user-authorized Google Drive connection; all selection and synchronization remain inside the authenticated Kimono organization policy."
+    },
+    {
+      "tool": "corpus_file_retry",
+      "readOnly": "Requests canonical processing retry for the current version of the selected file. It changes Kimono state.",
+      "destructive": "The operation retains resources and uses canonical generation, idempotency, receipt, or authorization guards as applicable.",
+      "openWorld": "It operates on private first-party Kimono resources in the authenticated organization."
+    },
+    {
+      "tool": "corpus_upload_prepare",
+      "readOnly": "Prepares a signed upload under an authorized manual-upload source. It changes Kimono state.",
+      "destructive": "The operation retains resources and uses canonical generation, idempotency, receipt, or authorization guards as applicable.",
+      "openWorld": "It operates on private first-party Kimono resources in the authenticated organization."
+    },
+    {
+      "tool": "corpus_upload_finalize",
+      "readOnly": "Finalizes the signed source-bound upload and starts canonical processing. It changes Kimono state.",
+      "destructive": "The operation retains resources and uses canonical generation, idempotency, receipt, or authorization guards as applicable.",
+      "openWorld": "It operates on private first-party Kimono resources in the authenticated organization."
+    },
+    {
+      "tool": "corpus_archive",
+      "readOnly": "Archives a Corpus, changing its availability while retaining records. It changes Kimono state.",
+      "destructive": "The availability or access change requires explicit user intent and the tool confirmation field.",
+      "openWorld": "It operates on private first-party Kimono resources in the authenticated organization."
+    },
+    {
+      "tool": "corpus_source_disable",
+      "readOnly": "Pauses source synchronization and new uploads. Already processed content remains available under the Corpus access rules. It changes Kimono state.",
+      "destructive": "Pausing interrupts future ingestion while retaining processed content and requires explicit user intent and the tool confirmation field.",
+      "openWorld": "It operates on private first-party Kimono resources in the authenticated organization."
+    },
+    {
+      "tool": "corpus_agent_access_grant",
+      "readOnly": "Grants a Builder-authorized Agente access to the selected Corpus. It changes Kimono state.",
+      "destructive": "The availability or access change requires explicit user intent and the tool confirmation field.",
+      "openWorld": "It operates on private first-party Kimono resources in the authenticated organization."
+    },
+    {
+      "tool": "corpus_agent_grants_replace",
+      "readOnly": "Replaces the visible Agente grant set and can revoke access; Core preserves grants hidden by authorization. It changes Kimono state.",
+      "destructive": "The availability or access change requires explicit user intent and the tool confirmation field.",
+      "openWorld": "It operates on private first-party Kimono resources in the authenticated organization."
     }
   ]
 }

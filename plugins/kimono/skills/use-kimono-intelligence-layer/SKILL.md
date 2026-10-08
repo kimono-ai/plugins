@@ -16,6 +16,11 @@ scopes, organization MCP permissions configured for the user's existing role,
 and resource ACLs. Never supply another organization ID or bypass a denied
 destination.
 
+For creating, editing, or archiving a Corpus, configuring its sources,
+uploading source files, or granting Agente access, use `manage-kimono-corpora`.
+Information proposals and discussions remain in this skill; configuring or
+publishing an Agente remains in Builder.
+
 ## Search and evidence
 
 - Resolve the user's Corpus with `context_spaces_search`. Use returned IDs in
@@ -51,6 +56,9 @@ destination.
 - Revoking a source requires an explicit request for that source and effect.
   Existing authorization for the same target and effect does not require a
   repeated conversational confirmation. Host approval prompts may still apply.
+  `corpus_source_disable` pauses synchronization and new uploads while keeping
+  already processed content available under the Corpus's access rules. Use the
+  Corpus management skill for that source lifecycle operation.
 
 On an ambiguous mutation failure, inspect the affected proposal, discussion,
 or source before retrying, following `recovery: "reconcile_before_retry"` when

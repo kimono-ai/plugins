@@ -15,13 +15,55 @@ organization, role, and resource ACLs.
 | Agente Builder | `build-kimono-agents` | Create, edit, test, publish, and retire agents. |
 | Brain | `analyze-with-kimono-brain` | Analyze operational organization data: usage, people, conversations, and adoption. |
 | Corpus and Intelligence Layer | `use-kimono-intelligence-layer` | Search authorized sources and institutional information; manage explicit proposals and discussions. |
-| Corpus and Intelligence Layer sources | `ingest-kimono-sources` | Send events and documents and verify their processing and search availability. |
+| Corpus | `manage-kimono-corpora` | Create, edit, archive, manage manual-upload or Google Drive sources and files, and grant or revoke Agente access. |
+| Intelligence Layer and project sources | `ingest-kimono-sources` | Send events and documents and verify their processing and search availability. |
 
 Corpus, Intelligence Layer, and Agente are the same product concepts in the
 platform and MCP. A Corpus contains sources; an Agente can use an attached
 Corpus, and an authorized MCP host can query it directly. Brain's operational
 analytics workflow does not own source ingestion or Intelligence Layer
 governance.
+
+## Corpus management
+
+Version **0.4.0** uses the matching server's `corpus_*` tools for Corpus
+administration. Read access uses **Consultar a Intelligence Layer**; management
+also uses **Gerenciar a Intelligence Layer**, the corresponding OAuth scopes,
+and resource authorization. These are permissions for the organization's
+existing roles, including custom roles; access does not require platform screens.
+
+Corpus administration includes creating, renaming, describing, and archiving;
+manual-upload and Google Drive source management; per-file inventory and
+processing retry; and Agente grants. Archival revokes the Corpus's accesses
+and retains its records. Disabling a source pauses synchronization and new
+uploads; already processed content remains available under the Corpus's access
+rules.
+An Agente grant and configuring or publishing that Agente's workflow are
+separate operations; Builder permissions continue to govern configuration.
+
+Google Drive selection uses the Google account already connected to Kimono.
+Folder discovery and new or changed roots require live authorization; existing
+source synchronization follows its configured connection. Only that connection's
+owner can browse the existing source's folders. MCP does not import
+host Drive credentials or expose S3 configuration.
+
+Upload Corpus files through a `manual_upload` source with
+`corpus_upload_prepare` → signed PUT → `corpus_upload_finalize`. Supplying
+`targetSpaceId` to a generic ingestion session does not, by itself, register
+the upload in a Corpus source's file inventory. Read the inventory and verify
+current search and evidence before reporting availability.
+
+Use the returned `accessGeneration`, `syncGeneration`, or `processingVersion`
+for the corresponding mutation. On conflicts or unknown outcomes, read the
+current resource and reconcile the request before retrying. Agent grant
+replacement submits the intended complete active visible grant list; preserve
+active grants the user did not ask to revoke and keep revoked grants inactive
+unless reactivation was requested. Existing explicit user authorization for the
+target and effect is sufficient for required confirmation fields.
+
+Update the local plugin and refresh the remote catalog independently. These
+workflows become available when the matching Core and MCP release is deployed;
+an installed skill alone does not prove server availability or authorization.
 
 ## Access and authorization
 
@@ -43,8 +85,8 @@ headless MCP access.
 authorized administrator. A resource access denial requires the matching ACL;
 reconnecting does not bypass either permission boundary.
 
-Publishing, unpublishing, deletion, cancellation, source revocation, and
-proposal decisions require explicit user intent for the target and effect.
+Publishing, unpublishing, deletion, cancellation, source pausing or revocation,
+and proposal decisions require explicit user intent for the target and effect.
 An existing explicit request for that same action is sufficient; do not ask
 for repetitive conversational confirmation. A host may still require tool
 approval independently.
