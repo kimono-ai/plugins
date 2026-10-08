@@ -51,7 +51,9 @@ Never use private APIs, storage credentials, or another organization's identity.
 - Read the source's `syncGeneration` before `corpus_source_update`; supply it
   as `expectedSyncGeneration` when changing Drive roots. Browse existing source
   folders only when authorized; discovery and an already configured source's
-  synchronization are separate operations.
+  synchronization are separate operations. Changing roots starts a new
+  publication generation; inspect source and file state before reporting
+  the refreshed content as available.
 - Use `corpus_source_sync` to request synchronization, and
   `corpus_source_disable` or `corpus_source_resume` for the specified source.
   Disabling a source initiates revocation of that source's content and stops
