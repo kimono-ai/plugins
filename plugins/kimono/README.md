@@ -55,8 +55,9 @@ current search and evidence before reporting availability.
 Use the returned `accessGeneration`, `syncGeneration`, or `processingVersion`
 for the corresponding mutation. On conflicts or unknown outcomes, read the
 current resource and reconcile the request before retrying. Agent grant
-replacement submits the intended complete visible grant list; preserve grants
-the user did not ask to revoke. Existing explicit user authorization for the
+replacement submits the intended complete active visible grant list; preserve
+active grants the user did not ask to revoke and keep revoked grants inactive
+unless reactivation was requested. Existing explicit user authorization for the
 target and effect is sufficient for required confirmation fields.
 
 Update the local plugin and refresh the remote catalog independently. These

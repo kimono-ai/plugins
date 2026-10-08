@@ -95,9 +95,11 @@ publication; a query failure is not normal heartbeat lag.
 
 - For Corpus administration, read `corpus_get` for the selected Corpus's
   visible grants and eligible published Agentes. To grant, revoke, or replace
-  access, read the current list and send the intended complete visible list to
+  access, start from visible grants with `active: true` and send the intended
+  complete active list to
   `corpus_agent_grants_replace`. This operation replaces that list; do not
-  accidentally omit grants the user wanted to retain. The Core preserves
+  omit active grants the user wanted to retain or reactivate revoked grants
+  without that request. The Core preserves
   grants hidden by Agente authorization. Supply the current
   `expectedAccessGeneration`.
 - `corpus_agent_access_list` and `corpus_agent_access_grant` are the separate
