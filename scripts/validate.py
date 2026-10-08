@@ -55,6 +55,26 @@ SUBMISSION_MCP_TOOL_NAMES = {
     "context_ingest_attachment_prepare",
     "context_ingest_attachment_finalize",
     "context_ingest_artifact_status",
+    "corpus_list",
+    "corpus_get",
+    "corpus_create",
+    "corpus_update",
+    "corpus_archive",
+    "corpus_source_create",
+    "corpus_source_update",
+    "corpus_source_disable",
+    "corpus_source_resume",
+    "corpus_source_sync",
+    "corpus_drive_roots",
+    "corpus_drive_children",
+    "corpus_files_list",
+    "corpus_source_files_list",
+    "corpus_file_retry",
+    "corpus_upload_prepare",
+    "corpus_upload_finalize",
+    "corpus_agent_access_list",
+    "corpus_agent_access_grant",
+    "corpus_agent_grants_replace",
 }
 
 LEGACY_DOTTED_TOOL_NAMES = {
@@ -164,7 +184,7 @@ def main():
     assert len(listing["longDescription"]) <= 4_000
     for key in ("websiteURL", "supportURL", "privacyPolicyURL", "termsOfServiceURL"):
         assert listing[key].startswith("https://"), f"Invalid submission {key}"
-    assert len(submission["testCases"]["positive"]) == 7
+    assert len(submission["testCases"]["positive"]) == 9
     assert len(submission["testCases"]["negative"]) == 3
     for case in submission["testCases"]["positive"]:
         unknown_tools = set(case["expectedTools"]) - SUBMISSION_MCP_TOOL_NAMES

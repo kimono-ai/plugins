@@ -46,7 +46,8 @@ Anthropic's curated official marketplace is separate.
 
 - [`kimono`](./plugins/kimono): use and build Agentes, analyze operational
   organization data with Brain, search Corpora and the Intelligence Layer,
-  and ingest source events and documents with processing verification.
+  manage Corpora, their sources and Agente access, and ingest source events
+  and documents with processing verification.
 
 ## Update an installed plugin
 
@@ -70,6 +71,11 @@ Refresh or reconnect the MCP catalog when published tool schemas change.
 Additional OAuth consent is needed only for missing scopes; reconnecting does
 not grant organization MCP permissions or resource access. See the
 [plugin's access and recovery guidance](./plugins/kimono/README.md).
+
+Version **0.4.0** adds Corpus management guidance. Its `corpus_*` workflows
+require the matching hosted MCP catalog; update the plugin and refresh the
+connection after the server release. If those tools are absent, report their
+unavailability instead of inventing a private API fallback.
 
 ## Security and support
 

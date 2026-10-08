@@ -9,7 +9,8 @@
     "Analyze organization activity and adoption with Kimono Brain.",
     "Create, edit, test, publish, or retire Kimono agents through the Builder.",
     "Search authorized Corpora and institutional information in the Intelligence Layer with source evidence.",
-    "Ingest source events and documents and verify each artifact before claiming search availability."
+    "Ingest source events and documents and verify each artifact before claiming search availability.",
+    "Manage authorized Corpora, manual-upload or connected Google Drive sources, file processing, and Agente access without requiring platform screens."
   ],
   "supportedPlatforms": [
     "Claude Code"

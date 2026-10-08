@@ -1,6 +1,6 @@
 ---
 name: ingest-kimono-sources
-description: Send authorized source events and document attachments to Kimono through Context Ingestion Sessions, and verify processing and search availability. Use for adding sources to a Corpus, the Intelligence Layer, or a specified project; do not use for querying existing sources or operational Brain analytics.
+description: Send authorized source events and document attachments to the Kimono Intelligence Layer or a specified project through Context Ingestion Sessions, and verify processing and search availability. Use Corpus management for source-bound Corpus file uploads and Drive configuration; use Intelligence Layer tools for queries and Brain for operational analytics.
 ---
 
 # Ingest Kimono Sources
@@ -10,6 +10,13 @@ it does not access Kimono storage or private APIs. Resolve an authorized
 destination and use only the catalog and schemas available to the connected
 user. OAuth scopes, dynamic organization role MCP permissions, and destination
 ACLs all apply. Do not derive write access from platform screen visibility.
+
+For files that must appear in a Corpus's source inventory, use
+`manage-kimono-corpora` and the `corpus_upload_prepare` → PUT →
+`corpus_upload_finalize` flow with the selected `corpusId` and `sourceId`.
+A generic session aimed at a Corpus's `targetSpaceId` publishes to that space;
+it does not, by itself, register a file under one of the Corpus's sources.
+Keep this skill for source event streams and project-file sessions.
 
 ## Send source events and attachments
 

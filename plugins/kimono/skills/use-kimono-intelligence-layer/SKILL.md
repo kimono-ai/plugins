@@ -16,6 +16,11 @@ scopes, organization MCP permissions configured for the user's existing role,
 and resource ACLs. Never supply another organization ID or bypass a denied
 destination.
 
+For creating, editing, or archiving a Corpus, configuring its sources,
+uploading source files, or granting Agente access, use `manage-kimono-corpora`.
+Information proposals and discussions remain in this skill; configuring or
+publishing an Agente remains in Builder.
+
 ## Search and evidence
 
 - Resolve the user's Corpus with `context_spaces_search`. Use returned IDs in

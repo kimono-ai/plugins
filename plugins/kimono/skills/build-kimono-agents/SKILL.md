@@ -25,6 +25,13 @@ reconnecting cannot override a denied organization permission.
 - Use `agents_validate` and `agents_diff` after an edit, then read the draft
   again to verify the resulting state. These operations do not publish it.
 
+When the requested change uses a Corpus, check authorized access separately
+from the Agente's workflow configuration. `corpus_agent_access_list` and
+`corpus_agent_access_grant` use the Agente-oriented Builder entrypoint and its
+extra permissions. A grant alone does not add a Corpus to the workflow or
+publish the Agente. Use `manage-kimono-corpora` for Corpus lifecycle, source
+administration, source-bound file uploads, and the visible Corpus grant set.
+
 ## Test
 
 - Use `agents_preview` with a representative prompt and the intended
