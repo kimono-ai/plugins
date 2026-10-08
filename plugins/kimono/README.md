@@ -35,8 +35,9 @@ existing roles, including custom roles; access does not require platform screens
 Corpus administration includes creating, renaming, describing, and archiving;
 manual-upload and Google Drive source management; per-file inventory and
 processing retry; and Agente grants. Archival revokes the Corpus's accesses
-and retains its records. Disabling a source starts revoking its content and
-stops its synchronization.
+and retains its records. Disabling a source pauses synchronization and new
+uploads; already processed content remains available under the Corpus's access
+rules.
 An Agente grant and configuring or publishing that Agente's workflow are
 separate operations; Builder permissions continue to govern configuration.
 
@@ -84,8 +85,8 @@ headless MCP access.
 authorized administrator. A resource access denial requires the matching ACL;
 reconnecting does not bypass either permission boundary.
 
-Publishing, unpublishing, deletion, cancellation, source revocation, and
-proposal decisions require explicit user intent for the target and effect.
+Publishing, unpublishing, deletion, cancellation, source pausing or revocation,
+and proposal decisions require explicit user intent for the target and effect.
 An existing explicit request for that same action is sufficient; do not ask
 for repetitive conversational confirmation. A host may still require tool
 approval independently.

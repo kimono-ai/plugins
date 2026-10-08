@@ -381,8 +381,8 @@
     },
     {
       "tool": "corpus_source_disable",
-      "readOnly": "Disables a source and changes its publication and synchronization availability. It changes Kimono state.",
-      "destructive": "The availability or access change requires explicit user intent and the tool confirmation field.",
+      "readOnly": "Pauses source synchronization and new uploads. Already processed content remains available under the Corpus access rules. It changes Kimono state.",
+      "destructive": "Pausing interrupts future ingestion while retaining processed content and requires explicit user intent and the tool confirmation field.",
       "openWorld": "It operates on private first-party Kimono resources in the authenticated organization."
     },
     {

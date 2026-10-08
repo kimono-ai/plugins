@@ -56,6 +56,9 @@ publishing an Agente remains in Builder.
 - Revoking a source requires an explicit request for that source and effect.
   Existing authorization for the same target and effect does not require a
   repeated conversational confirmation. Host approval prompts may still apply.
+  `corpus_source_disable` pauses synchronization and new uploads while keeping
+  already processed content available under the Corpus's access rules. Use the
+  Corpus management skill for that source lifecycle operation.
 
 On an ambiguous mutation failure, inspect the affected proposal, discussion,
 or source before retrying, following `recovery: "reconcile_before_retry"` when

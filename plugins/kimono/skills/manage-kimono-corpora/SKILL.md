@@ -56,10 +56,10 @@ Never use private APIs, storage credentials, or another organization's identity.
   the refreshed content as available.
 - Use `corpus_source_sync` to request synchronization, and
   `corpus_source_disable` or `corpus_source_resume` for the specified source.
-  Disabling a source initiates revocation of that source's content and stops
-  its synchronization; archiving affects the Corpus. Describe that selected
-  effect. A sync request accepted or a job queued
-  does not prove all documents have been published.
+  Disabling a source pauses synchronization and new uploads. Already processed
+  content remains available under the Corpus's access rules. Archiving revokes
+  access to the Corpus. Describe the selected effect. A sync request accepted
+  or a job queued does not prove all documents have been published.
 
 ## Upload and verify files
 
