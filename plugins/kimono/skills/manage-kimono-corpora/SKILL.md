@@ -46,6 +46,8 @@ Never use private APIs, storage credentials, or another organization's identity.
   scopes. Omit both `corpusId` and `sourceId` to discover roots before creating
   a source; provide both to browse an existing authorized source. For children,
   preserve the returned `rootId`, `rootType`, and `driveId` when supplied.
+  Browsing a source's folders is restricted to the owner of its configured
+  Google account, even when another Corpus manager can synchronize that source.
 - Read the source's `syncGeneration` before `corpus_source_update`; supply it
   as `expectedSyncGeneration` when changing Drive roots. Browse existing source
   folders only when authorized; discovery and an already configured source's

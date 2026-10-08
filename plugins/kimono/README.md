@@ -42,7 +42,8 @@ separate operations; Builder permissions continue to govern configuration.
 
 Google Drive selection uses the Google account already connected to Kimono.
 Folder discovery and new or changed roots require live authorization; existing
-source synchronization follows its configured connection. MCP does not import
+source synchronization follows its configured connection. Only that connection's
+owner can browse the existing source's folders. MCP does not import
 host Drive credentials or expose S3 configuration.
 
 Upload Corpus files through a `manual_upload` source with
