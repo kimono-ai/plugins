@@ -347,7 +347,7 @@
       "tool": "corpus_source_resume",
       "readOnly": "Resumes the selected source through the canonical source lifecycle. It changes Kimono state.",
       "destructive": "The operation retains resources and uses canonical generation, idempotency, receipt, or authorization guards as applicable.",
-      "openWorld": "It operates on private first-party Kimono resources in the authenticated organization."
+      "openWorld": "The operation may resume a configured Google Drive source; later access uses the existing authorized Kimono connection rather than host credentials."
     },
     {
       "tool": "corpus_source_sync",
