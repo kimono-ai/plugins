@@ -1,0 +1,4 @@
+interface:
+  display_name: "Manage Kimono Projetos"
+  short_description: "Share selected files with project participants"
+  default_prompt: "Use $manage-kimono-projects to share this proposal with the intended colleague in an appropriate Kimono Projeto."

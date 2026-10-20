@@ -6,7 +6,9 @@ description: Create, edit, archive, and manage Kimono Corpora, their manual-uplo
 # Manage Kimono Corpora
 
 Use the hosted Kimono MCP tools available to the connected user. A Corpus
-contains sources and documents. Intelligence Layer search and Agente use
+contains curated sources and documents; its current audience is organizational.
+For a selected file shared with named colleagues, use `manage-kimono-projects`
+instead of creating a Corpus. Intelligence Layer search and Agente use
 operate on those same authorized resources; Brain handles operational analytics.
 Never use private APIs, storage credentials, or another organization's identity.
 
@@ -14,8 +16,9 @@ Never use private APIs, storage credentials, or another organization's identity.
 
 - Resolve the Corpus with `corpus_list`, then read `corpus_get` before changing
   it. Keep its `id`, `spaceId`, `accessGeneration`, sources, and capabilities.
-  Use `spaceId` to scope `knowledge_search`; it is not interchangeable with
-  `corpusId`.
+  Query it with `knowledge_search({ focus: "corpus", corpusRefs: [...] })`,
+  using the returned Corpus ID/reference. `spaceId` is an internal destination
+  identifier, not the public search selector or an interchangeable Corpus ID.
 - Reads require the OAuth grant and **Consultar a Intelligence Layer** under
   **Configurações → MCP → Permissões** for the user's existing role. Management
   also requires **Gerenciar a Intelligence Layer** and the corresponding write
@@ -80,8 +83,9 @@ For a file that must belong to a Corpus's inventory, choose or create its
    processing version and failure independently. When a failed file is eligible
    for a retry, use `corpus_file_retry` with its current
    `expectedProcessingVersion`; requesting a retry is not proof of completion.
-5. Verify actual availability with `knowledge_search` in the default `current`
-   view scoped to the Corpus's `spaceId`, then `knowledge_evidence_read`.
+5. Verify actual availability with `knowledge_search` using `focus: "corpus"`
+   and `corpusRefs` for the selected Corpus, then open the result by `ref`
+   with `knowledge_read`.
    Preserve evidence IDs, revisions, and processing versions when reporting.
 
 A generic ingestion session's `targetSpaceId` does not, by itself, register a

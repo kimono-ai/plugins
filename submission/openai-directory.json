@@ -2,8 +2,8 @@
   "mcpServerURL": "https://mcp.usekimono.ai/mcp",
   "listing": {
     "displayName": "Kimono",
-    "shortDescription": "Agentes e Corpus",
-    "longDescription": "Use accessible Kimono Agentes and private conversations, analyze operational organization data with Brain, search Corpora and the Intelligence Layer, manage Corpora, sources, files, and Agente access, ingest source events with processing verification, and build, test, publish, or retire Agentes through the canonical Builder. OAuth scopes, organization MCP permissions for dynamic roles, and resource authorization govern every operation.",
+    "shortDescription": "Projetos, Agentes e Corpus",
+    "longDescription": "Share selected files with colleagues in Kimono Projetos, manage project participants, query authorized Projeto and Corpus evidence through the Intelligence Layer, curate Corpora and sources, use and build Agentes, and analyze operational organization data with Brain. Host-generated OAuth authorization, dynamic organization MCP permissions, and resource ACLs govern every operation. Verify processing and search before reporting document availability.",
     "developerName": "Kimono AI",
     "category": "Business & Operations",
     "websiteURL": "https://usekimono.ai",
@@ -11,7 +11,7 @@
     "privacyPolicyURL": "https://usekimono.ai/privacy",
     "termsOfServiceURL": "https://usekimono.ai/terms"
   },
-  "releaseNotes": "Release 0.4.0 adds Corpus lifecycle, manual-upload and connected Google Drive sources, per-file inventory and processing retries, and Agente access management. Uses dynamic role MCP permissions, resource authorization, source-bound signed uploads, generation fences, and reconciliation of uncertain writes. Deploy the matching corpus_* catalog before directory submission; no directory publication is performed by this release.",
+  "releaseNotes": "Release 0.5.0 adds Projeto collaboration guidance and updates Intelligence Layer reads to knowledge_search/list/read/traverse/timeline with explicit project and Corpus focus. Clarifies host-generated OAuth URLs, consent continuation, and separate processing/search verification. Deploy the matching hosted catalog and validate directory material against production before submission; no directory publication is performed by this change.",
   "testCases": {
     "positive": [
       {
@@ -58,11 +58,12 @@
       {
         "prompt": "Find my accessible Corpus called Demo handbook, answer from its published documents, and cite the evidence. Do not modify anything.",
         "expectedTools": [
-          "context_spaces_search",
+          "corpus_list",
+          "corpus_get",
           "knowledge_search",
-          "knowledge_evidence_read"
+          "knowledge_read"
         ],
-        "expectedBehavior": "Resolve an accessible Corpus, scope a default current search to its returned space ID, and read and cite source evidence including revisions when available. Never treat a search failure as empty results or a document as an automatically accepted fact."
+        "expectedBehavior": "Resolve an accessible Corpus, use focus:corpus and corpusRefs for the selected Corpus, and read and cite source evidence including revisions when available. Never treat a search failure as empty results or a document as an automatically accepted fact."
       },
       {
         "prompt": "Add the provided demo document and source event stream to the specified institutional destination, then verify processing and search availability. Do not use a different destination.",
@@ -75,9 +76,9 @@
           "context_ingest_session_status",
           "context_ingest_artifact_status",
           "knowledge_search",
-          "knowledge_evidence_read"
+          "knowledge_read"
         ],
-        "expectedBehavior": "Use the authorized destination and stable idempotency/event IDs; upload bytes only to the returned signed URL. Inspect each attachment independently from the sealed session artifact, distinguish deterministic publication from later semantic interpretation, and verify actual current search and source evidence rather than claiming success from queued or publicationRecorded alone. A targetSpaceId alone does not register the artifact in a Corpus source inventory; use source-bound Corpus upload tools for that separate requirement."
+        "expectedBehavior": "Use the authorized destination and stable idempotency/event IDs; upload bytes only to the returned signed URL. Inspect each attachment independently from the sealed session artifact, distinguish deterministic publication from later semantic interpretation, and verify actual scoped search and source evidence rather than claiming success from queued or publicationRecorded alone. A targetSpaceId alone does not register the artifact in a Corpus source inventory; use source-bound Corpus upload tools for that separate requirement."
       },
       {
         "prompt": "Create a demo Corpus named Review handbook, add a manual-upload source, upload the supplied demo document there, and grant access to the specified authorized published demo Agente. Do not edit or publish the Agente.",
@@ -91,9 +92,9 @@
           "corpus_source_files_list",
           "corpus_agent_grants_replace",
           "knowledge_search",
-          "knowledge_evidence_read"
+          "knowledge_read"
         ],
-        "expectedBehavior": "Use only authorized resources and existing explicit intent. Create the nested source payload with a stable idempotency key; PUT bytes only to the returned signed URL and finalize using its signed receipt under the same Corpus and source. Verify file processing independently from acceptance and use the Corpus spaceId for current search and evidence. Read visible grants and eligible published Agentes; use the current expectedAccessGeneration and confirm field for the complete intended visible grant set without configuring or publishing the Agente. Preserve existing active:true grants unless revocation was requested; do not reactivate active:false grants without that request. If a write outcome is uncertain, read the affected resource before retrying."
+        "expectedBehavior": "Use only authorized resources and existing explicit intent. Create the nested source payload with a stable idempotency key; PUT bytes only to the returned signed URL and finalize using its signed receipt under the same Corpus and source. Verify file processing independently from acceptance and use focus:corpus and corpusRefs, then knowledge_read for evidence. Read visible grants and eligible published Agentes; use the current expectedAccessGeneration and confirm field for the complete intended visible grant set without configuring or publishing the Agente. Preserve existing active:true grants unless revocation was requested; do not reactivate active:false grants without that request. If a write outcome is uncertain, read the affected resource before retrying."
       },
       {
         "prompt": "Add the requested Google Drive folder to the specified demo Corpus using my Google account already connected to Kimono. Synchronize it and report the observed state.",
@@ -230,7 +231,7 @@
       "openWorld": "It reads private first-party Kimono state within the authenticated organization."
     },
     {
-      "tool": "knowledge_evidence_read",
+      "tool": "knowledge_read",
       "readOnly": "Reads evidence and its revision inside the authenticated resource ACL boundary.",
       "destructive": "It cannot change, overwrite, revoke, or delete the inspected resource.",
       "openWorld": "It reads private first-party Kimono state within the authenticated organization."

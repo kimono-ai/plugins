@@ -1,7 +1,7 @@
 {
   "name": "kimono",
-  "version": "0.4.0",
-  "description": "Work with Kimono Agentes, Corpora, Intelligence Layer, Brain analytics, and Builder.",
+  "version": "0.5.0",
+  "description": "Work with Kimono Projetos, Agentes, Corpora, Intelligence Layer, Brain analytics, and Builder.",
   "author": {
     "name": "Kimono AI",
     "email": "support@usekimono.ai",
@@ -13,6 +13,7 @@
   "keywords": [
     "kimono",
     "agents",
+    "projects",
     "corpus",
     "intelligence-layer",
     "brain",
@@ -23,8 +24,8 @@
   "mcpServers": "./.mcp.json",
   "interface": {
     "displayName": "Kimono",
-    "shortDescription": "Agentes e Corpus",
-    "longDescription": "Use accessible Kimono Agentes and private conversations, analyze operational organization data with Brain, search Corpora and the Intelligence Layer, manage Corpora, sources, files, and Agente access, ingest source events with processing verification, and build, test, publish, or retire Agentes through the canonical Builder. OAuth scopes, organization MCP permissions for dynamic roles, and resource authorization govern every operation.",
+    "shortDescription": "Projetos, Agentes e Corpus",
+    "longDescription": "Share selected files with colleagues in Kimono Projetos, manage project participants, query authorized Projeto and Corpus evidence through the Intelligence Layer, curate Corpora and sources, use and build Agentes, and analyze operational organization data with Brain. Host-generated OAuth authorization, dynamic organization MCP permissions, and resource ACLs govern every operation. Verify processing and search before reporting document availability.",
     "developerName": "Kimono AI",
     "category": "Business & Operations",
     "capabilities": [
@@ -36,8 +37,8 @@
     "privacyPolicyURL": "https://usekimono.ai/privacy",
     "termsOfServiceURL": "https://usekimono.ai/terms",
     "defaultPrompt": [
-      "Ask one of my Kimono Agentes for help",
-      "Answer from my Corpora and cite evidence",
+      "Share this proposal with a colleague in a Kimono Projeto",
+      "Answer from my Projeto or Corpus and cite evidence",
       "Help me improve and test a Kimono Agente"
     ],
     "brandColor": "#111827",

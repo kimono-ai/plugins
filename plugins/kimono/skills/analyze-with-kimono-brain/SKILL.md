@@ -8,8 +8,8 @@ description: Analyze authorized operational organization data with Kimono Brain,
 Use Brain as the analyst; do not invent organizational facts from plugin
 metadata or prior chat context.
 
-Brain analyzes operational organization data. Corpus and the Intelligence
-Layer have their own published tools; do not route source ingestion, source
+Brain analyzes operational organization data. Projetos, Corpus and the
+Intelligence Layer have their own published tools; do not route source ingestion, source
 search, or information governance through Brain. Use only tools exposed to the
 connected user; OAuth consent does not override the organization's MCP
 permissions for the user's role or resource ACLs.
