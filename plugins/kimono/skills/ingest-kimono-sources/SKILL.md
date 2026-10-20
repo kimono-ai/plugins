@@ -17,13 +17,20 @@ For files that must appear in a Corpus's source inventory, use
 A generic session aimed at a Corpus's `targetSpaceId` publishes to that space;
 it does not, by itself, register a file under one of the Corpus's sources.
 Keep this skill for source event streams and project-file sessions.
+For a proposal shared with named colleagues, first use
+`manage-kimono-projects` to resolve the participants and choose/create the
+Projeto. Upload only the selected file, preserving private conversation history.
 
 ## Send source events and attachments
 
 1. Open a session with `context_ingest_session_open`, retaining its session ID
-   and a stable `idempotencyKey` for the same operation. Use the returned Corpus
-   or destination ID as `targetSpaceId`, or the explicitly requested project
-   as `targetProjectId`; omission uses the organization destination.
+   and a stable `idempotencyKey` for the same operation. For a Projeto, set
+   `targetProjectId` explicitly. For explicitly requested institutional
+   publication, discover a destination with `context_spaces_search` and
+   `action: "publish"`, then use its `targetSpaceId`. Omission defaults to the
+   organization destination: never omit the target for private sharing.
+   Project sessions use `projects:*` scopes and project MCP permissions;
+   institutional sessions use `knowledge:*` and Intelligence Layer permissions.
 2. Append JSON CloudEvents with `context_ingest_session_append` in batches of
    at most 100. Preserve `source`, event `id`, and original `time`; reusing the
    source and event ID deduplicates retries. Include at least one source event
@@ -69,10 +76,11 @@ permissions; do not invent an endpoint or claim processing verification.
 
 Document extraction and publication make document evidence searchable. Later
 semantic interpretation through the organization's heartbeat is a separate
-stage; it is not required before checking published document evidence with
-`knowledge_search`'s default `current` view. Search within the authorized
-destination and read the returned evidence. A 500 or capacity error is a failed
-query, not normal heartbeat delay or proof that the upload failed.
+stage; it is not required before checking published document evidence. For
+Projetos, inspect `project_files_list`, then search with `focus: "project"` and
+`projectRef` set to UUID or `project:UUID`. For Corpus, use `focus: "corpus"`
+and `corpusRefs`. Read the result by `ref` with `knowledge_read` and retain its
+revision. A 500 or capacity error is a failed query, not normal heartbeat delay or proof that the upload failed.
 
 Retry an idempotent operation with the original event IDs, keys, and receipt
 when appropriate. For `recovery: "retry_read"`, wait `retryAfterSeconds` before

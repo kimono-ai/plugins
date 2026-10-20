@@ -30,6 +30,11 @@ Do not infer MCP access from the visibility of a platform screen.
 7. Return the agent's final response and identify the conversation used when
    that helps the user continue later.
 
+A conversation with an Agente is not a file-sharing operation. To share a
+selected proposal with a colleague, use `manage-kimono-projects`; do not expose
+the whole source conversation. An Agente can use project/Corpus context only
+when its configuration and the person's access permit it.
+
 Do not cancel a turn unless the user explicitly asks to stop it. Do not expose
 internal IDs unless needed for disambiguation or troubleshooting.
 

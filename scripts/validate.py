@@ -47,7 +47,7 @@ SUBMISSION_MCP_TOOL_NAMES = {
     "turns_cancel",
     "context_spaces_search",
     "knowledge_search",
-    "knowledge_evidence_read",
+    "knowledge_read",
     "context_ingest_session_open",
     "context_ingest_session_append",
     "context_ingest_session_close",

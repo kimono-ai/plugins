@@ -2,8 +2,8 @@
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "kimono",
   "displayName": "Kimono",
-  "version": "0.4.0",
-  "description": "Work with Kimono Agentes, Corpora, Intelligence Layer, Brain analytics, and Builder.",
+  "version": "0.5.0",
+  "description": "Work with Kimono Projetos, Agentes, Corpora, Intelligence Layer, Brain analytics, and Builder.",
   "author": {
     "name": "Kimono AI",
     "email": "support@usekimono.ai",
@@ -15,6 +15,7 @@
   "keywords": [
     "kimono",
     "agents",
+    "projects",
     "corpus",
     "intelligence-layer",
     "brain",
