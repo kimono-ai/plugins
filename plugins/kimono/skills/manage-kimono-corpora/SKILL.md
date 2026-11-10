@@ -19,11 +19,10 @@ Never use private APIs, storage credentials, or another organization's identity.
   Query it with `knowledge_search({ focus: "corpus", corpusRefs: [...] })`,
   using the returned Corpus ID/reference. `spaceId` is an internal destination
   identifier, not the public search selector or an interchangeable Corpus ID.
-- Reads require the OAuth grant and **Consultar a Intelligence Layer** under
-  **Configurações → MCP → Permissões** for the user's existing role. Management
-  also requires **Gerenciar a Intelligence Layer** and the corresponding write
-  scope. Custom roles work through the same policy. Resource ACLs and Agente
-  authorization still apply; platform screen visibility does not grant access.
+- Reads and management require the relevant OAuth scopes, the user's current
+  platform permissions, and resource ACLs. Custom roles use the same platform
+  policy. Agente authorization still applies; screen visibility does not grant
+  access.
 - Use returned capabilities and visible tools to establish the available
   operation. Missing permission is not a reason to switch accounts or invent
   another execution path. Refresh the catalog after a policy or server update;
@@ -45,7 +44,7 @@ Never use private APIs, storage credentials, or another organization's identity.
   host credentials, or substitute a Drive connector from another account.
   Creating or changing roots requires access to the selected folders through
   that connected account. Follow the returned root selection schema.
-  Folder discovery requires both read and management MCP permissions and
+  Folder discovery requires the applicable platform permissions and OAuth
   scopes. Omit both `corpusId` and `sourceId` to discover roots before creating
   a source; provide both to browse an existing authorized source. For children,
   preserve the returned `rootId`, `rootType`, and `driveId` when supplied.
@@ -107,8 +106,8 @@ publication; a query failure is not normal heartbeat lag.
   grants hidden by Agente authorization. Supply the current
   `expectedAccessGeneration`.
 - `corpus_agent_access_list` and `corpus_agent_access_grant` are the separate
-  Agente-oriented Builder entrypoints. They additionally require the Builder
-  MCP permission and `agents:write`, plus authorization to edit that Agente.
+  Agente-oriented Builder entrypoints. They additionally require `agents:write`
+  and the platform authorization to edit that Agente.
   Do not use them to bypass the authorized Corpus administration workflow.
 - A grant permits the Agente to access a Corpus. Configuring the Agente's
   workflow to use it and publishing that workflow are separate Builder

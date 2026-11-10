@@ -12,8 +12,8 @@ of a Projeto or introduce a new user-facing space entity. Both use the
 Intelligence Layer with their own authorization boundaries.
 
 Use only the published tools visible to the connected account. Access combines
-`projects:read`/`projects:write`, the organization's MCP project permissions for
-its dynamic roles, and resource ACLs. Platform screen visibility is separate.
+`projects:read`/`projects:write`, the user's current platform permissions and
+the Projeto's resource ACL. Platform screen visibility is separate.
 A missing permission is not a reason to use an organizational destination.
 
 ## Share a selected document with a colleague
@@ -59,6 +59,17 @@ retain the explicit thread selection and do not share the source conversation
 just to share one file. Changing a role, removing a member, or broadening access
 must match the user's requested effect. Read the current members before a
 change and preserve unrelated access.
+
+To update a shared file, read `project_files_list` and obtain its `fileId` and
+`revisionId`. Open a project-targeted ingestion session and include
+`data.replacement: {fileId, expectedRevisionId}` in the file snapshot event;
+use the returned revision as `expectedRevisionId`. Upload and finalize through
+`ingest-kimono-sources`. If no revision is returned, do not guess it or claim
+the update succeeded. On `PROJECT_FILE_REVISION_CONFLICT`, read the current
+inventory and its revision again before a new attempt. A retry of the same
+admitted upload uses the same event and receipt. The replacement has a new
+`fileId` and revision after publication; the previous version stays available
+while processing. Confirm the resulting file and its state in the inventory.
 
 `project_update` changes the Projeto's metadata. `project_files_remove`
 removes the selected project file only when requested. Read the current file

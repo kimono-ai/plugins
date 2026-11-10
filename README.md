@@ -86,13 +86,12 @@ marketplaces do not auto-update by default; see
 
 Refresh or reconnect the MCP catalog when published tool schemas change.
 Additional OAuth consent is needed only for missing scopes; reconnecting does
-not grant organization MCP permissions or resource access. See the
+not grant platform permissions or resource access. See the
 [plugin's access and recovery guidance](./plugins/kimono/README.md).
 
-Version **0.5.0** adds Projeto collaboration (`project_*`), the current
-`knowledge_search/list/read/traverse/timeline` contract, and clearer OAuth
-onboarding. Deploy the matching hosted catalog before relying on these
-workflows. Existing grants may need consent for `projects:read`/`projects:write`;
+Version **0.5.1** aligns authorization guidance with platform permissions and
+adds revision-checked replacement of Projeto files. Deploy the matching hosted
+catalog before relying on these workflows. Existing grants may need consent for `projects:read`/`projects:write`;
 refreshing skills or the catalog does not grant scopes or permissions. If a
 tool is absent, report its unavailability instead of inventing a private API
 fallback.

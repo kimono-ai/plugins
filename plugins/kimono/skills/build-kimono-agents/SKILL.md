@@ -11,9 +11,9 @@ permissions, and blockers. When the write scope is available, use
 `agents_draft_get` to read the structured draft. These are the current MCP tool
 names; use the names returned by the server's catalog exactly.
 
-The catalog is filtered by the organization's MCP permissions for the user's
-existing role. Matching OAuth scopes and resource access are also required;
-reconnecting cannot override a denied organization permission.
+The user's current platform permissions, matching OAuth scopes, and resource
+access govern execution. Tool discovery alone does not establish permission;
+reconnecting cannot override a denied platform permission.
 
 ## Create or edit
 

@@ -8,8 +8,8 @@ description: Start, continue, inspect, or manage conversations with agents avail
 Preserve the user's language and intent. Treat agent names and conversation
 titles as human labels that require resolution.
 
-Use the tools visible to the connected user. Organization MCP permissions for
-the user's role, OAuth scopes, and each agent or conversation's ACL all apply.
+Use the tools visible to the connected user. The user's current platform
+permissions, OAuth scopes, and each agent or conversation's ACL all apply.
 Do not infer MCP access from the visibility of a platform screen.
 
 1. Call `agents_resolve` with the user's name or description.
