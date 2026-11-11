@@ -19,6 +19,11 @@ reconnecting cannot override a denied platform permission.
 
 - Use `agents_create` for a new agent and retain the returned agent and Builder
   thread IDs.
+- To work conversationally on an existing agent, call `agents_builder_open`
+  with its ID, then use the returned Builder thread with `turns_submit` and
+  poll `turns_get` until terminal. This opens a new session and requires the
+  current OAuth scope and edit access to that agent; continue with the returned
+  thread instead of opening another session for each message.
 - Use `agents_draft_patch` for typed blueprint changes and
   `agents_workflow_patch` for workflow changes. Read the current draft first
   and send its `baseRevision`; these tools reject stale concurrent edits.
