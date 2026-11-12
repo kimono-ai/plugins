@@ -1,6 +1,6 @@
 {
   "name": "kimono",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Work with Kimono Projetos, Agentes, Corpora, Intelligence Layer, Brain analytics, and Builder.",
   "author": {
     "name": "Kimono AI",
@@ -25,7 +25,7 @@
   "interface": {
     "displayName": "Kimono",
     "shortDescription": "Projetos, Agentes e Corpus",
-    "longDescription": "Share selected files with colleagues in Kimono Projetos, manage project participants, query authorized Projeto and Corpus evidence through the Intelligence Layer, curate Corpora and sources, use and build Agentes, and analyze operational organization data with Brain. Host-generated OAuth authorization, dynamic organization MCP permissions, and resource ACLs govern every operation. Verify processing and search before reporting document availability.",
+    "longDescription": "Share selected files with colleagues in Kimono Projetos, manage project participants, query authorized Projeto and Corpus evidence through the Intelligence Layer, curate Corpora and sources, use and build Agentes, and analyze operational organization data with Brain. OAuth scopes, current platform permissions, and resource ACLs govern every operation. Verify processing and search before reporting document availability.",
     "developerName": "Kimono AI",
     "category": "Business & Operations",
     "capabilities": [

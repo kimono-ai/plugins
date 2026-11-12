@@ -12,7 +12,7 @@ terms throughout the platform and MCP. Internal graph/space names are not
 additional user-facing products.
 
 Use the connected server's actual tools. Access requires compatible OAuth
-scopes, organization MCP permissions for dynamic roles, and resource ACLs.
+scopes, the user's current platform permissions, and resource ACLs.
 An OAuth grant limited to Projetos does not authorize unrelated institutional
 content. Do not select another account or bypass a denied destination.
 

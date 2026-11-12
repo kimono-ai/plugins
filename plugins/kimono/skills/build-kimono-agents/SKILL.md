@@ -11,14 +11,19 @@ permissions, and blockers. When the write scope is available, use
 `agents_draft_get` to read the structured draft. These are the current MCP tool
 names; use the names returned by the server's catalog exactly.
 
-The catalog is filtered by the organization's MCP permissions for the user's
-existing role. Matching OAuth scopes and resource access are also required;
-reconnecting cannot override a denied organization permission.
+The user's current platform permissions, matching OAuth scopes, and resource
+access govern execution. Tool discovery alone does not establish permission;
+reconnecting cannot override a denied platform permission.
 
 ## Create or edit
 
 - Use `agents_create` for a new agent and retain the returned agent and Builder
   thread IDs.
+- To work conversationally on an existing agent, call `agents_builder_open`
+  with its ID, then use the returned Builder thread with `turns_submit` and
+  poll `turns_get` until terminal. This opens a new session and requires the
+  current OAuth scope and edit access to that agent; continue with the returned
+  thread instead of opening another session for each message.
 - Use `agents_draft_patch` for typed blueprint changes and
   `agents_workflow_patch` for workflow changes. Read the current draft first
   and send its `baseRevision`; these tools reject stale concurrent edits.

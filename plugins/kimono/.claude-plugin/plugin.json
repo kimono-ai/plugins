@@ -2,7 +2,7 @@
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "kimono",
   "displayName": "Kimono",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Work with Kimono Projetos, Agentes, Corpora, Intelligence Layer, Brain analytics, and Builder.",
   "author": {
     "name": "Kimono AI",

@@ -3,7 +3,7 @@
   "listing": {
     "displayName": "Kimono",
     "shortDescription": "Projetos, Agentes e Corpus",
-    "longDescription": "Share selected files with colleagues in Kimono Projetos, manage project participants, query authorized Projeto and Corpus evidence through the Intelligence Layer, curate Corpora and sources, use and build Agentes, and analyze operational organization data with Brain. Host-generated OAuth authorization, dynamic organization MCP permissions, and resource ACLs govern every operation. Verify processing and search before reporting document availability.",
+    "longDescription": "Share selected files with colleagues in Kimono Projetos, manage project participants, query authorized Projeto and Corpus evidence through the Intelligence Layer, curate Corpora and sources, use and build Agentes, and analyze operational organization data with Brain. OAuth scopes, current platform permissions, and resource ACLs govern every operation. Verify processing and search before reporting document availability.",
     "developerName": "Kimono AI",
     "category": "Business & Operations",
     "websiteURL": "https://usekimono.ai",
@@ -11,7 +11,7 @@
     "privacyPolicyURL": "https://usekimono.ai/privacy",
     "termsOfServiceURL": "https://usekimono.ai/terms"
   },
-  "releaseNotes": "Release 0.5.0 adds Projeto collaboration guidance and updates Intelligence Layer reads to knowledge_search/list/read/traverse/timeline with explicit project and Corpus focus. Clarifies host-generated OAuth URLs, consent continuation, and separate processing/search verification. Deploy the matching hosted catalog and validate directory material against production before submission; no directory publication is performed by this change.",
+  "releaseNotes": "Release 0.5.1 aligns authorization with platform permissions and adds revision-checked replacement of Projeto files. OAuth scopes and resource access continue to apply; processing and search are verified separately. Deploy the matching hosted catalog and validate directory material against production before submission; no directory publication is performed by this change.",
   "testCases": {
     "positive": [
       {
@@ -106,7 +106,7 @@
           "corpus_source_sync",
           "corpus_source_files_list"
         ],
-        "expectedBehavior": "Discover roots through the Kimono-connected account with both required MCP permissions and scopes. Select only folders returned under live authorization, use a stable source idempotency key in the nested source payload, and distinguish synchronization requested, processing underway, and availability verified. Do not request Google tokens or use host credentials, another account, S3, or private APIs."
+        "expectedBehavior": "Discover roots through the Kimono-connected account with the required platform permissions and OAuth scopes. Select only folders returned under live authorization, use a stable source idempotency key in the nested source payload, and distinguish synchronization requested, processing underway, and availability verified. Do not request Google tokens or use host credentials, another account, S3, or private APIs."
       }
     ],
     "negative": [

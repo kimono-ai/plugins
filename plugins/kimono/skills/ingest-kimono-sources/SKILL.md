@@ -8,7 +8,7 @@ description: Send authorized source events and document attachments to the Kimon
 Use the hosted MCP ingestion tools. The host adapts the source to CloudEvents;
 it does not access Kimono storage or private APIs. Resolve an authorized
 destination and use only the catalog and schemas available to the connected
-user. OAuth scopes, dynamic organization role MCP permissions, and destination
+user. OAuth scopes, current platform permissions for the user, and destination
 ACLs all apply. Do not derive write access from platform screen visibility.
 
 For files that must appear in a Corpus's source inventory, use
@@ -29,8 +29,9 @@ Projeto. Upload only the selected file, preserving private conversation history.
    publication, discover a destination with `context_spaces_search` and
    `action: "publish"`, then use its `targetSpaceId`. Omission defaults to the
    organization destination: never omit the target for private sharing.
-   Project sessions use `projects:*` scopes and project MCP permissions;
-   institutional sessions use `knowledge:*` and Intelligence Layer permissions.
+   Project sessions require both `projects:read` and `projects:write` and the
+   user's current Projeto access; institutional sessions use the applicable
+   `knowledge:*` scopes and platform Intelligence Layer permissions.
 2. Append JSON CloudEvents with `context_ingest_session_append` in batches of
    at most 100. Preserve `source`, event `id`, and original `time`; reusing the
    source and event ID deduplicates retries. Include at least one source event
@@ -38,7 +39,13 @@ Projeto. Upload only the selected file, preserving private conversation history.
    `ai.kimono.source.file.snapshot` events, with `source` matching the session,
    `subject` as the source file ID, and `data: {name, revision}`. Follow returned
    `fileDecisions`: upload files requiring an add or update, and avoid duplicate
-   uploads for unchanged or pending files.
+   uploads for unchanged or pending files. To explicitly replace a Projeto file,
+   first read `project_files_list` and include `replacement: {fileId,
+   expectedRevisionId}` in `data`, using its current `fileId` and `revisionId`.
+   Do not confuse the workspace `revisionId` with the source snapshot `revision`.
+   If the file has no revision, do not invent one. On
+   `PROJECT_FILE_REVISION_CONFLICT`, read the inventory again before a new
+   attempt; resuming the same admitted upload uses the original event and receipt.
 3. For each document, call `context_ingest_attachment_prepare` with metadata.
    Upload bytes with a PUT to the exact returned signed URL: institutional
    attachments return `uploadUrl` and `requiredHeaders`; project files return
@@ -51,6 +58,8 @@ Projeto. Upload only the selected file, preserving private conversation history.
    `artifactId` and `deterministicJobId` independently; they are not the
    session's JSONL artifact. For project files retain the returned `fileId`,
    `documentId`, `jobId`, and `workflowId` instead of fabricating artifact IDs.
+   A replacement is published as a new `fileId` and revision; the previous
+   version stays available while the replacement is processed.
 5. Close the session with `context_ingest_session_close`. An institutional
    session seals its event artifact and queues processing. A project-targeted
    session uses the project-file flow and may return null artifact and job IDs
@@ -71,7 +80,7 @@ close. It reports the artifact, processing job, and semantic interpretation
 separately. `publicationRecorded` is a persisted publication receipt, not proof
 that a current search succeeds. Retain failure codes and the artifact/job
 diagnostic IDs rather than waiting indefinitely or uploading duplicates. If
-the tool is absent, refresh the catalog and check the connected user's MCP
+the tool is absent, refresh the catalog and check the connected user's platform
 permissions; do not invent an endpoint or claim processing verification.
 
 Document extraction and publication make document evidence searchable. Later

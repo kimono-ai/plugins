@@ -67,10 +67,10 @@ Without a returned or observed URL, provide the Projeto name and ID; do not
 invent a platform route. A sharing notification does not prove the recipient
 opened or read the file.
 
-Project reads and writes use `projects:read`/`projects:write`, the corresponding
-organization MCP permissions, and the Projeto's ACL. Institutional permissions
-are not a substitute. Agente use of a Projeto also respects its configured
-project context and the person's access.
+Project reads require `projects:read`; writes require both `projects:read` and
+`projects:write`. The user's current platform permissions and the Projeto's ACL
+also apply. Institutional permissions do not replace Projeto access. Agente use
+of a Projeto also respects its configured project context and the person's access.
 
 ## Corpus and source management
 
@@ -115,19 +115,18 @@ publication. A query error is not normal heartbeat lag.
 
 ## Access and recovery
 
-Every operation satisfies OAuth scopes, organization MCP permissions configured
-under **Configurações → MCP → Permissões** for the existing dynamic roles, and
-the specific resource's ACL. Platform screen visibility is separate. The
-server filters tool discovery and revalidates each execution.
+Every operation satisfies the connection's OAuth scopes, the user's current
+platform permissions for their organization role, and the specific resource's
+ACL. Platform screen visibility is separate. The Core revalidates access on each
+operation; a visible tool does not by itself prove access to a resource.
 
 `KIMONO_MCP_INSUFFICIENT_SCOPE` requires additional consent. Existing grants do
-not automatically gain the new project scopes. `MCP_PERMISSION_DENIED` requires
-the relevant organization permission; a resource denial requires its ACL.
+not automatically gain the new project scopes. A platform permission denial
+requires the relevant role permission; a resource denial requires its ACL.
 Reconnecting does not bypass those boundaries. A project-only grant limits
-knowledge reads to authorized Projetos. For existing grants, ingestion can
-accept legacy knowledge scopes, but still requires the destination-specific
-project MCP permission and Projeto ACL; this is not a workaround for denied
-project access. New project connections should request `projects:*`.
+knowledge reads to authorized Projetos. Opening or modifying a Projeto ingestion
+session requires both `projects:read` and `projects:write`; legacy knowledge
+scopes do not replace the Projeto scopes.
 
 An explicit user request for the same target and effect remains valid across
 steps; avoid repetitive confirmation questions. Publishing, removal, revocation,
@@ -138,7 +137,7 @@ and proposal decisions must match that intent. Host tool approval is separate.
 | `retry_read` | Wait the reported delay and retry the read; stop repeated failures and keep diagnostic IDs. |
 | `reconcile_before_retry` | Read the resource and establish whether a mutation took effect before resending. |
 | `reauthorize` | Complete OAuth through the host-generated authorization URL. |
-| `check_permissions` | Check organization MCP permission and resource ACL. |
+| `check_permissions` | Check the platform permission and resource ACL. |
 | `refresh_state` | Read the current revision/generation before changing it. |
 | `investigate` | Keep the error and correlation IDs; do not invent a cause or retry blindly. |
 
@@ -150,8 +149,8 @@ returned. Poll turns and previews with `turns_get` until `terminal: true`.
 
 ## Update and host manifests
 
-Version **0.5.0** adds Projeto collaboration guidance, updates the current
-Intelligence Layer read contract, and clarifies host-generated OAuth consent.
+Version **0.5.1** aligns plugin guidance with platform authorization and adds
+explicit revision-checked Projeto file replacement.
 Deploy the matching Core/MCP release, update the installed plugin, reload its
 skills, and refresh the remote tool catalog. These are separate steps. A skill
 alone does not prove a tool is available or authorized; do not invent private
